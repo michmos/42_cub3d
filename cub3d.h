@@ -68,6 +68,6 @@ typedef struct s_cub3d
 }	t_cub3d;
 
 
-char	*read_file(const char *map_path);
+char	*read_file(int	fd);
 
 #endif // !CUB3D_H

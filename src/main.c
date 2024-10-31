@@ -30,10 +30,20 @@ int	parse_content(t_input *input, const char *content)
 int	parse_file(t_input *input, const char *map_path)
 {
 	char	*file_content;
+	int		fd;
 
-	file_content = read_file(map_path);
+	fd = open(map_path, O_RDONLY);
+	if (fd == -1)
+	{
+		return (perror("open"), -1);
+	}
+
+	file_content = read_file(fd);
 	if (!file_content)
+	{
 		return (-1);
+	}
+
 	if (parse_content(input, file_content) == -1)
 	{
 		free(file_content);
