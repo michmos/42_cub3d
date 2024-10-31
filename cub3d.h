@@ -69,5 +69,6 @@ typedef struct s_cub3d
 
 
 char	*read_file(int	fd);
+int		safe_atoi(const char *str, int	*result);
 
 #endif // !CUB3D_H
