@@ -11,6 +11,8 @@
 # define USAGE "USAGE: ./cub3d <map>"
 # define READ_BUF_SIZE 100
 
+typedef char t_error;
+
 typedef enum e_fields
 {
 	VOID,
@@ -38,10 +40,10 @@ typedef union u_rgba
 typedef struct s_input
 {
 	int		**map;
-	char	*north_txt;
-	char	*south_txt;
-	char	*west_txt;
-	char	*east_txt;
+	char	*north_txtre;
+	char	*south_txtre;
+	char	*west_txtre;
+	char	*east_txtre;
 	t_rgba	floor;
 	t_rgba	ceiling;
 }	t_input;

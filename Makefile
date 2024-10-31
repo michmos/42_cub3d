@@ -14,6 +14,10 @@ OBJS	:= $(SRCS:$(SRC_DIR)/%.c=$(OBJ_DIR)/%.o)
 
 CC		:= cc
 CFLAGS	:= -Wall -Werror -Wextra -Wunused -Wuninitialized -Wunreachable-code -MMD -MP
+NOERR	?= 0
+ifeq ($(NOERR), 1)
+CFLAGS	:= -MMD -MP
+endif
 LDFLAGS	:= -ldl -lglfw -pthread -lm
 RM		:= rm -rf
 DEBUG	?= 1
