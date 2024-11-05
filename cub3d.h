@@ -52,6 +52,7 @@ typedef struct s_map
 {
 	char	*map;
 	size_t	width;
+	size_t	height;
 
 } t_map;
 
@@ -87,6 +88,29 @@ typedef struct s_cub3d
 
 }	t_cub3d;
 
+typedef enum e_screendimensions
+{
+	SCREEN_WIDTH = 3840,
+	SCREEN_HEIGHT = 2160,
+	IMAGE_WIDTH = SCREEN_WIDTH / 2,
+	IMAGE_HEIGHT = SCREEN_HEIGHT / 2
+}	t_screendimensions;
+
+typedef struct s_minimap
+{
+	int	rect_height;
+	int	rect_width;
+	int	y;
+	int	x;
+}		t_minimap;
+
+typedef enum e_minimapcolours
+{
+	VOID_COLOUR,
+	SPACE_COLOUR = 0xF73E3E,
+	WALL_COLOUR = 0x3EF776,
+	PLAYER_COLOUR
+}	t_minimapcolours;
 
 char	*read_file(int	fd);
 int		safe_atoi(const char *str, int	*result);
