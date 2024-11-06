@@ -1,5 +1,5 @@
 
-#include "../cub3d.h"
+#include "../../cub3d.h"
 
 static void	handle_err(int fd_to_close, void *ptr_to_free, const char *msg)
 {
@@ -29,18 +29,11 @@ static int	append_str(char **s1, char *s2)
 	return (0);
 }
 
-char	*read_file(const char *map_path)
+char	*read_file(int	fd)
 {
 	char	*file_content;
 	char	buffer[READ_BUF_SIZE];
-	int		fd;
 	int		bytes_read;
-
-	fd = open(map_path, O_RDONLY);
-	if (fd == -1)
-	{
-		return (perror("open"), NULL);
-	}
 
 	file_content = ft_strdup("");
 	if (!file_content)
