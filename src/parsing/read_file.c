@@ -1,5 +1,5 @@
 
-#include "../cub3d.h"
+#include "../../cub3d.h"
 
 static void	handle_err(int fd_to_close, void *ptr_to_free, const char *msg)
 {

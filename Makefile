@@ -1,16 +1,20 @@
 
 NAME	:= cub3d
+PARSING_TEST	:= test_parsing
 
 42_LIBS		:= external_libs/42_libs/libft.a
 MLX_42_DIR	:= external_libs/MLX42
 MLX_42		:= external_libs/MLX42/build/libmlx42.a
 SUBMOD_FLAG	:= external_libs/42_libs/Makefile
 
-SRC_DIR	:= src
-SRCS	:= $(shell find $(SRC_DIR) -iname "*.c")
+SRC_DIR			:= src
+SRCS			:= $(shell find $(SRC_DIR) -iname "*.c")
+MAINS			:= $(shell find $(SRC_DIR) -iname "main*.c")
+SRCS_WO_MAINS	:= $(filter-out $(MAINS), $(SRCS))
 
-OBJ_DIR	:= .build
-OBJS	:= $(SRCS:$(SRC_DIR)/%.c=$(OBJ_DIR)/%.o)
+OBJ_DIR			:= .build
+OBJS			:= $(SRCS:$(SRC_DIR)/%.c=$(OBJ_DIR)/%.o)
+OBJS_WO_MAINS	:= $(SRCS_WO_MAINS:$(SRC_DIR)/%.c=$(OBJ_DIR)/%.o)
 
 CC		:= cc
 CFLAGS	:= -Wall -Werror -Wextra -Wunused -Wuninitialized -Wunreachable-code -MMD -MP
@@ -22,16 +26,21 @@ LDFLAGS	:= -ldl -lglfw -pthread -lm
 RM		:= rm -rf
 DEBUG	?= 1
 ifeq ($(DEBUG), 1)
-CFLAGS	+= -g
+CFLAGS	+= -g -fsanitize=address
+LDFLAGS	+= -fsanitize=address
 endif
 
 all: $(NAME)
 
 -include $(OBJS:.o=.d)
 
-$(NAME): $(SUBMOD_FLAG) $(42_LIBS) $(MLX_42) $(OBJS)
-	$(CC) $(OBJS) $(MLX_42) $(42_LIBS) $(LDFLAGS) -o $(NAME)
+$(NAME): $(SUBMOD_FLAG) $(42_LIBS) $(MLX_42) $(OBJS_WO_MAINS) $(OBJ_DIR)/main.o
+	$(CC) $(OBJS_WO_MAINS) $(OBJ_DIR)/main.o $(MLX_42) $(42_LIBS) $(LDFLAGS) -o $(NAME)
 	@printf "$(CREATED)" $(NAME) $(CUR_DIR)
+
+$(PARSING_TEST): $(SUBMOD_FLAG) $(42_LIBS) $(MLX_42) $(OBJS_WO_MAINS) $(OBJ_DIR)/tests/main_parsing.o
+	$(CC) $(OBJS_WO_MAINS) $(OBJ_DIR)/tests/main_parsing.o $(MLX_42) $(42_LIBS) $(LDFLAGS) -o $@
+	@printf "$(CREATED)" $@ $(CUR_DIR)
 
 $(SUBMOD_FLAG):
 	git submodule init
@@ -61,6 +70,8 @@ fclean:
 	@printf "$(REMOVED)" $(OBJ_DIR) $(CUR_DIR)
 	$(RM) $(NAME)
 	@printf "$(REMOVED)" $(NAME) $(CUR_DIR)
+	$(RM) $(PARSING_TEST)
+	@printf "$(REMOVED)" $(PARSING_TEST) $(CUR_DIR)
 	$(RM) $(dir $(MLX_42))
 	@printf "$(REMOVED)" "build" $(abspath $(MLX_42_DIR))
 	$(MAKE) -C $(dir $(42_LIBS)) fclean

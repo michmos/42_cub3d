@@ -114,5 +114,19 @@ typedef enum e_minimapcolours
 
 char	*read_file(int	fd);
 int		safe_atoi(const char *str, int	*result);
+t_error	parse_rgb(const char *str, size_t *idx, t_rgb *rgb);
+t_error	parse_file(t_input *input, const char *map_path);
+t_error	parse_txtre_path(const char *str, size_t *idx, char **txtre_path);
+t_error	parse_map(const char *str, size_t *idx, t_map *map);
+bool	is_valid_map_char(char c);
+
+
+void	skip_num(const char *str, size_t *idx);
+void	skip_whitespaces(const char *str, size_t *idx);
+void	append_char(char *str, char c, size_t n);
+size_t	get_line_len(const char *str);
+int		safe_atoi(const char *str, int	*result);
+
+void	free_input(t_input *input);
 
 #endif // !CUB3D_H
