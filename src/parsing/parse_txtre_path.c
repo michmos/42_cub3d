@@ -3,11 +3,11 @@
 
 t_error	parse_txtre_path(const char *str, size_t *idx, char **txtre_path)
 {
-	size_t	path_len;
+	size_t		path_len;
 
 	// skip keyword
 	(*idx) += 3;
-	skip_whitespaces(str, idx);
+	skip_chars(" ", str, idx);
 	// set path
 	path_len = ft_wordlen(&str[*idx]);
 	*txtre_path = ft_substr(str, *idx, path_len);
