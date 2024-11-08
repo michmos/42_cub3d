@@ -77,6 +77,14 @@ void	skip_whitespaces(const char *str, size_t *idx)
 	}
 }
 
+void	skip_chars(const char *charset, const char *str, size_t *idx)
+{
+	while (str[*idx] && ft_strchr(charset, str[*idx]))
+	{
+		(*idx)++;
+	}
+}
+
 void	skip_num(const char *str, size_t *idx)
 {
 	if (str[*idx] == '-' || str[*idx] == '+')
@@ -89,3 +97,29 @@ void	skip_num(const char *str, size_t *idx)
 	}
 }
 
+void	put_cur_line(int fd, const char *str)
+{
+	size_t	len;
+	char	*nl_ptr;
+
+	nl_ptr = ft_strchr(str, '\n');
+	if (nl_ptr)
+	{
+		len = nl_ptr - str;
+	}
+	else
+	{
+		len = ft_strlen(str);
+	}
+	write(fd, str, len);
+	write(fd, "\n", 1);
+}
+
+void	put_cur_word(int fd, const char *str)
+{
+	size_t	len;
+
+	len = ft_wordlen(str);
+	write(fd, str, len);
+	write(fd, "\n", 1);
+}

@@ -100,9 +100,12 @@ bool	is_valid_map_char(char c);
 
 void	skip_num(const char *str, size_t *idx);
 void	skip_whitespaces(const char *str, size_t *idx);
+void	skip_chars(const char *charset, const char *str, size_t *idx);
 void	append_char(char *str, char c, size_t n);
 size_t	get_line_len(const char *str);
 int		safe_atoi(const char *str, int	*result);
+void	put_cur_line(int fd, const char *str);
+void	put_cur_word(int fd, const char *str);
 
 void	free_input(t_input *input);
 
