@@ -1,5 +1,53 @@
 
 #include "../../cub3d.h"
+#include <unistd.h>
+
+static void	put_unexpected_token_err(int input_flags, const char *rmng_str)
+{
+	put_err("Error occurred when parsing .cub: Unexpected token: ");
+	if (*rmng_str)
+	{
+		put_cur_word(STDERR_FILENO, rmng_str);
+		put_err("(In case this is the map: all other elements must be listed before the map)\n");
+	}
+	else
+	{
+		put_err("EOF\n");
+	}
+
+	put_err("Instead expected one of the following: \n");
+	if (input_flags != ALL_FLAGS)
+	{
+		if ((input_flags & NO) == 0)
+		{
+			put_err(" NO <path_to_texture>\n");
+		}
+		if ((input_flags & SO) == 0)
+		{
+			put_err(" SO <path_to_texture>\n");
+		}
+		if ((input_flags & WE) == 0)
+		{
+			put_err(" WE <path_to_texture>\n");
+		}
+		if ((input_flags & EA) == 0)
+		{
+			put_err(" EA <path_to_texture>\n");
+		}
+		if ((input_flags & C) == 0)
+		{
+			put_err(" C <r>, <g>, <b>\n");
+		}
+		if ((input_flags & F) == 0)
+		{
+			put_err(" F <r>, <g>, <b>\n");
+		}
+	}
+	else
+	{
+		put_err(" <map>");
+	}
+}
 
 static t_error	parse_content(t_input *input, const char *content)
 {
@@ -9,7 +57,8 @@ static t_error	parse_content(t_input *input, const char *content)
 
 	input_flags = 0;
 	i = 0;
-	while (content[i])
+	error = 0;
+	while (content[i] && !error)
 	{
 		skip_whitespaces(content, &i);
 		if (ft_strncmp(&content[i], "NO ", 3) == 0 && !(input_flags & NO))
@@ -42,23 +91,22 @@ static t_error	parse_content(t_input *input, const char *content)
 			error = parse_rgb(content, &i, &input->ceiling);
 			input_flags |= C;
 		}
-		else if (is_valid_map_char(content[i])  && input_flags == ALL_FLAGS)
+		else if (is_valid_map_char(content[i]) && input_flags == ALL_FLAGS)
 		{
 			error = parse_map(content, &i, &input->map);
-			break ;
+			break;
 		}
 		else
 		{
-			ft_printf_fd(STDERR_FILENO, "Unexpexted token when parsing map: %.10s\n", &content[i]); // TODO: update error message approach
+			put_unexpected_token_err(input_flags, &content[i]);
 			error = -1;
 		}
-		
-		if (error)
-		{
-			; // TODO: handle
-			return (-1);
-		}
-
+		// TODO: you might want to check for whitespace here in case inputs need to be separated by whitespaces
+	}
+	if (error)
+	{
+		free_input(input);
+		return (-1);
 	}
 	return (0);
 }
