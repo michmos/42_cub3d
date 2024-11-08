@@ -1,55 +1,73 @@
 
 #include "../../cub3d.h"
 
-t_error	parse_rgb(const char *str, size_t *idx, t_rgb *rgb)
+static int	skip_separators(const char *str, size_t *idx)
+{
+	skip_chars(" ", str, idx);
+	if (str[*idx] != ',')
+	{
+		put_err("Error occurred when parsing rgb value: Unexpected token: ");
+		put_cur_word(STDERR_FILENO, &str[*idx]);
+		put_err("Expected: ,\n");
+		return (-1);
+	}
+	(*idx)++;
+	skip_chars(" ", str, idx);
+	return (0);
+}
+
+static t_error	parse_rgb_component(const char *str, size_t *idx, u_int8_t *comp)
 {
 	int	temp;
 
-	temp = 0;
+	if (!ft_isdigit(str[*idx]))
+	{
+		put_err("Error occurred when parsing rgb value: Unexpected token: ");
+		put_cur_word(STDERR_FILENO, &str[*idx]);
+		put_err("Expected: <num between 0 and 255>\n");
+		return (-1);
+	}
+	else if (safe_atoi(&str[*idx], &temp) == -1 || temp < 0 || temp > 255)
+	{
+		put_err("Error occurred when parsing rgb value: Unvalid number\n");
+		put_err("Please provide a number between 0 and 255");
+		return (-1);
+	}
+	*comp = temp;
+	skip_num(str, idx);
+	return (0);
+}
+
+t_error	parse_rgb(const char *str, size_t *idx, t_rgb *rgb)
+{
+	const char	*keyword_pos;
+
+	keyword_pos = &str[*idx];
 	// skip keyword
 	(*idx) += 2;
-	skip_whitespaces(str, idx);
+	skip_chars(" ", str, idx);
 	// parse r
-	if (safe_atoi(&str[*idx], &temp) == -1 || temp < 0 || temp > 255)
+	if (parse_rgb_component(str, idx, &rgb->r) == -1)
 	{
-		put_err("wrong nb"); // TODO: add correct msg (overflow or just - or +)
 		return (-1);
 	}
-	rgb->r = temp;
-	skip_num(str, idx);
-	skip_whitespaces(str, idx);
-	if (str[*idx] != ',')
+	if (skip_separators(str, idx) == -1)
 	{
-		put_err("syntax error"); // TODO: add correct msg (Syntax error)
 		return (-1);
 	}
-	(*idx)++;
-
 	// parse g
-	skip_whitespaces(str, idx);
-	if (safe_atoi(&str[*idx], &temp) == -1 || temp < 0 || temp > 255)
+	if (parse_rgb_component(str, idx, &rgb->g) == -1)
 	{
-		put_err("wrong number"); // TODO: add correct msg (overflow or just - or +)
 		return (-1);
 	}
-	rgb->g = temp;
-	skip_num(str, idx);
-	skip_whitespaces(str, idx);
-	if (str[*idx] != ',')
+	if (skip_separators(str, idx) == -1)
 	{
-		put_err("syntax error"); // TODO: add correct msg (Syntax error)
 		return (-1);
 	}
-	(*idx)++;
-
 	// parse b
-	skip_whitespaces(str, idx);
-	if (safe_atoi(&str[*idx], &temp) == -1 || temp < 0 || temp > 255)
+	if (parse_rgb_component(str, idx,&rgb->b) == -1)
 	{
-		put_err("wrong number"); // TODO: add correct msg (overflow or just - or +)
 		return (-1);
 	}
-	rgb->b = temp;
-	skip_num(str, idx);
 	return (0);
 }
