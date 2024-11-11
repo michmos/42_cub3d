@@ -1,5 +1,4 @@
 
-echo "rgb tests"
 echo -e "\nmissing komma"
 ./test_parsing ./maps/invalid/rgb/missing_komma.cub
 echo -e "\n\nneg number"
@@ -25,7 +24,8 @@ echo -e "\n\nmissing_F_NO"
 ./test_parsing maps/invalid/missing_elements/missing_F_NO.cub
 echo -e "\n\nmissing_MAP"
 ./test_parsing maps/invalid/missing_elements/missing_map.cub
-#
-# ./test_parsing maps/invalid/map/chars_after_map.cub
-# # add maps to test all the map requirements
-#
+
+echo -e "\n\ninvalid_map_char"
+./test_parsing maps/invalid/invalid_maps/invalid_map_char.cub
+echo -e "\n\ninvalid_chars_after_map"
+./test_parsing maps/invalid/invalid_maps/invalid_chars_after_map.cub
