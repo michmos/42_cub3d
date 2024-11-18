@@ -106,10 +106,10 @@ typedef struct s_minimap
 
 typedef enum e_minimapcolours
 {
-	VOID_COLOUR,
+	VOID_COLOUR = 0x010000,
 	SPACE_COLOUR = 0xF73E3E,
 	WALL_COLOUR = 0x3EF776,
-	PLAYER_COLOUR
+	PLAYER_COLOUR = 0xff8f00 
 }	t_minimapcolours;
 
 char	*read_file(int	fd);

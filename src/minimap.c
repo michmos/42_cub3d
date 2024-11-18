@@ -6,7 +6,7 @@
 /*   By: dode-boe <dode-boe@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/11/05 14:37:08 by dode-boe      #+#    #+#                 */
-/*   Updated: 2024/11/05 17:21:26 by dode-boe      ########   odam.nl         */
+/*   Updated: 2024/11/16 19:37:42 by dode-boe      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,16 +20,22 @@ int	color_rectangle(t_map *map, mlx_t *mlx, mlx_image_t *img, t_minimap *help);
 int	draw_minimap(t_map *map)
 {
 	mlx_t		*mlx;
-	mlx_image_t	*img;
+	mlx_image_t	*map_img;
+	mlx_image_t	*plr_img;
 
 	mlx = mlx_init(IMAGE_WIDTH, IMAGE_HEIGHT, "cub3d", true);
 	if (!mlx)
 		my_mlx_error(mlx);
-	img = mlx_new_image(mlx, IMAGE_WIDTH, IMAGE_HEIGHT);
-	if (!img)
+	map_img = mlx_new_image(mlx, IMAGE_WIDTH, IMAGE_HEIGHT);
+	if (!map_img)
 		my_mlx_error(mlx);
-	color_rectangles(map, mlx, img);
-	mlx_image_to_window(mlx, img, 0, 0);
+	color_rectangles(map, mlx, map_img);
+	mlx_image_to_window(mlx, map_img, 0, 0);
+	plr_img = mlx_new_image(mlx, IMAGE_WIDTH / map->width, IMAGE_HEIGHT / map->height);
+	if (!map_img)
+		my_mlx_error(mlx);
+	color_player(plr_img, map, mlx);
+	mlx_image_to_window()
 	mlx_loop(mlx);
 	mlx_terminate(mlx);
 }
@@ -66,6 +72,28 @@ int	color_rectangles(t_map *map, mlx_t *mlx, mlx_image_t *img)
 	return (0);
 }
 
+color_player(mlx_image_t *img, t_map *map, mlx_t *mlx)
+{
+	int	x;
+	int	y;
+	int	x_max;
+	int	y_max;
+
+	y = 0;
+	y_max = IMAGE_HEIGHT / map->height;
+	x_max = IMAGE_WIDTH / map->width;
+	while (y < y_max)
+	{
+		x = 0;
+		while (x < x_max)
+		{
+			mlx_put_pixel(img, x, y, PLAYER_COLOUR);
+			x++;
+		}
+		y++;
+	}
+}
+
 int	color_rectangle(t_map *map, mlx_t *mlx, mlx_image_t *img, t_minimap *help)
 {
 	int	start_y;
@@ -94,7 +122,7 @@ int	colour(char c)
 {
 	if (c == WALL)
 		return (WALL_COLOUR);
-	else if (c == SPACE)
+	else if (c == SPACE || c == PLAYER_EAST || c == PLAYER_NORTH || c == PLAYER_SOUTH || c == PLAYER_WEST)
 		return (SPACE_COLOUR);
 	return (-1);
 }
@@ -104,7 +132,7 @@ int	main(void)
 	char	*map = "";
 	t_map	smap;
 
-	smap.map = "111110011111";
+	smap.map = "11111E011111";
 	smap.height = 3;
 	smap.width = 4;
 
