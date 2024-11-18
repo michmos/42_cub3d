@@ -6,39 +6,98 @@
 /*   By: dode-boe <dode-boe@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/11/05 14:37:08 by dode-boe      #+#    #+#                 */
-/*   Updated: 2024/11/18 14:54:18 by dode-boe      ########   odam.nl         */
+/*   Updated: 2024/11/18 19:07:34 by dode-boe      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../cub3d.h"
 
-int	colour(char c);
-int	my_mlx_error(mlx_t *mlx);
-int	color_rectangles(t_map *map, mlx_t *mlx, mlx_image_t *img);
-int	color_rectangle(t_map *map, mlx_t *mlx, mlx_image_t *img, t_minimap *help);
+int				colour(char c);
+int				my_mlx_error(mlx_t *mlx);
+int				color_rectangles(t_map *map, mlx_t *mlx, mlx_image_t *img, t_minimap_dims minimap);
+int				color_rectangle(t_map *map, t_minimap_help *help, t_minimap_dims dims);
+void			color_player(mlx_image_t *img, t_map *map, mlx_t *mlx, t_minimap_dims minimap);
+t_vec			get_plr_pos(t_map *map);
+t_minimap_dims	get_bs_dims(t_map *map);
 
 int	draw_minimap(t_map *map)
 {
 	mlx_t		*mlx;
 	mlx_image_t	*map_img;
 	mlx_image_t	*plr_img;
+	t_vec		plr_pos;
+	t_minimap_dims	minimap;
 
+
+	minimap = get_bs_dims(map);
 	mlx = mlx_init(IMAGE_WIDTH, IMAGE_HEIGHT, "cub3d", true);
 	if (!mlx)
 		my_mlx_error(mlx);
-	map_img = mlx_new_image(mlx, IMAGE_WIDTH, IMAGE_HEIGHT);
+	map_img = mlx_new_image(mlx, minimap.width, minimap.height);
 	if (!map_img)
 		my_mlx_error(mlx);
-	color_rectangles(map, mlx, map_img);
+	color_rectangles(map, mlx, map_img, minimap);
 	mlx_image_to_window(mlx, map_img, 0, 0);
-	plr_img = mlx_new_image(mlx, IMAGE_WIDTH / map->width, IMAGE_HEIGHT / map->height);
+	plr_img = mlx_new_image(mlx, minimap.width / map->width, minimap.height / map->height);
 	if (!map_img)
 		my_mlx_error(mlx);
-	color_player(plr_img, map, mlx);
-	mlx_image_to_window();
+	color_player(plr_img, map, mlx, minimap);
+
+	plr_pos = get_plr_pos(map);
+	mlx_image_to_window(mlx, plr_img, plr_pos.x * minimap.square, plr_pos.y * minimap.square);
 	mlx_loop(mlx);
 	mlx_terminate(mlx);
 }
+
+t_minimap_dims	get_bs_dims(t_map *map)
+{
+	uint16_t	square;
+	uint16_t	height;
+	uint16_t	width;
+
+	if (map->height > map->width)
+		square = map->height;
+	else
+		square = map->width;
+	while (square * map->height < MINIMAP_MAX_HEIGHT && square * map->width < MINIMAP_MAX_WIDTH)
+		square++;
+	while (square * map->height > MINIMAP_MAX_HEIGHT || square * map->width > MINIMAP_MAX_WIDTH)
+		square--;
+	height = square * map->height;
+	width = square * map->width;
+	return ((t_minimap_dims) {square, height, width});
+}
+
+bool	is_player_pos(char c)
+{
+	return ( c == PLAYER_EAST || c == PLAYER_NORTH || c == PLAYER_WEST || c == PLAYER_SOUTH);
+}
+
+t_vec	get_plr_pos(t_map *map)
+{
+	size_t	i;
+
+	i = 0;
+	while (!is_player_pos(map->map[i]))
+		i++;
+	return ((t_vec) { .x = i % map->width, .y = i / map->width });
+}
+
+// int	plr_pos(t_map *map, t_player mode)
+// {
+// 	int	i;
+
+// 	i = 0;
+// 	while (!is_player_pos(map->map[i]))
+// 		i++;
+// 	if (mode == MODE_X)
+// 	{
+// 		printf("returning X coordinate for player image: %i\n", (i % map->height) * (minimap.width / map->width));
+// 		return (i % map->height * (minimap.width / map->width));
+// 	}
+// 	printf("returning Y coordinate for player image: %i\n", (i / map->height) * (minimap.height / map->height));
+// 	return (i / map->height * (minimap.height / map->height));
+// }
 
 int	my_mlx_error(mlx_t *mlx)
 {
@@ -46,25 +105,25 @@ int	my_mlx_error(mlx_t *mlx)
 
 	if (strerr)
 		write(STDERR_FILENO, strerr, ft_strlen(strerr));
-	free(strerr);
 	if (mlx)
 		mlx_terminate(mlx);
 	exit(EXIT_FAILURE); // TODO: return EXIT_FAILURE instead. This is just temporary, to have an exit condition.
 }
 
-int	color_rectangles(t_map *map, mlx_t *mlx, mlx_image_t *img)
+int	color_rectangles(t_map *map, mlx_t *mlx, mlx_image_t *img, t_minimap_dims minimap)
 {
-	t_minimap	help;
+	t_minimap_help	help;
 
-	help.rect_height = IMAGE_HEIGHT / map->height; //TODO: Need map height as well. Can either write a function for it here or add it to map struct
-	help.rect_width = IMAGE_WIDTH / map->width;
+	
 	help.y = 0;
+	help.img = img;
+	help.mlx = mlx;
 	while (help.y < map->height)
 	{
 		help.x = 0;
 		while (help.x < map->width)
 		{
-			color_rectangle(map, mlx, img, &help);
+			color_rectangle(map, &help, minimap);
 			help.x++;
 		}
 		help.y++;
@@ -72,7 +131,7 @@ int	color_rectangles(t_map *map, mlx_t *mlx, mlx_image_t *img)
 	return (0);
 }
 
-color_player(mlx_image_t *img, t_map *map, mlx_t *mlx)
+void	color_player(mlx_image_t *img, t_map *map, mlx_t *mlx, t_minimap_dims minimap)
 {
 	int	x;
 	int	y;
@@ -80,8 +139,8 @@ color_player(mlx_image_t *img, t_map *map, mlx_t *mlx)
 	int	y_max;
 
 	y = 0;
-	y_max = IMAGE_HEIGHT / map->height;
-	x_max = IMAGE_WIDTH / map->width;
+	y_max = minimap.height / map->height;
+	x_max = minimap.width / map->width;
 	while (y < y_max)
 	{
 		x = 0;
@@ -94,7 +153,7 @@ color_player(mlx_image_t *img, t_map *map, mlx_t *mlx)
 	}
 }
 
-int	color_rectangle(t_map *map, mlx_t *mlx, mlx_image_t *img, t_minimap *help)
+int	color_rectangle(t_map *map, t_minimap_help *help, t_minimap_dims dims)
 {
 	int	start_y;
 	int	start_x;
@@ -102,16 +161,16 @@ int	color_rectangle(t_map *map, mlx_t *mlx, mlx_image_t *img, t_minimap *help)
 	int	x;
 	int	color;
 
-	start_y = help->y * help->rect_height;
-	start_x = help->x * help->rect_width;
+	start_y = help->y * dims.square;
+	start_x = help->x * dims.square;
 	y = start_y;
-	while (start_y - y <= help->rect_height && y < IMAGE_HEIGHT)
+	while (start_y - y <= dims.square && y < dims.height)
 	{
 		x = start_x;
-		while (x - start_x <= help->rect_width && x < IMAGE_WIDTH)
+		while (x - start_x <= dims.square && x < dims.width)
 		{
 			color = colour(map->map[help->y * map->width + help->x]);
-			mlx_put_pixel(img, x, y, color); //TODO: inspect what happens if this fails
+			mlx_put_pixel(help->img, x, y, color); //TODO: inspect what happens if this fails
 			x++;
 		}
 		y++;
@@ -129,12 +188,12 @@ int	colour(char c)
 
 int	main(void)
 {
-	char	*map = "";
+	const char	*map = "11111111111000000E011111111111";
 	t_map	smap;
 
-	smap.map = "11111E011111";
+	smap.map = map;
 	smap.height = 3;
-	smap.width = 4;
+	smap.width = 10;
 
 	draw_minimap(&smap);
 	return (0);

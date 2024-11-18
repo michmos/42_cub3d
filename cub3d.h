@@ -25,7 +25,7 @@ typedef enum e_fields
 	PLAYER_SOUTH = 'S',
 	PLAYER_WEST = 'W',
 	PLAYER_NORTH = 'N',
-	TERMINATOR
+	TERMINATOR = 88
 } t_fields;
 
 typedef enum e_inputs
@@ -78,8 +78,8 @@ typedef struct s_input
 
 typedef struct s_vec
 {
-	double	x;
-	double	y;
+	u_int32_t	x;
+	u_int32_t	y;
 } t_vec;
 
 typedef struct	s_txts
@@ -102,24 +102,39 @@ typedef enum e_screendimensions
 	SCREEN_WIDTH = 3840,
 	SCREEN_HEIGHT = 2160,
 	IMAGE_WIDTH = SCREEN_WIDTH / 2,
-	IMAGE_HEIGHT = SCREEN_HEIGHT / 2
+	IMAGE_HEIGHT = SCREEN_HEIGHT / 2,
+	MINIMAP_MAX_WIDTH = IMAGE_WIDTH / 2,
+	MINIMAP_MAX_HEIGHT = IMAGE_HEIGHT / 2
 }	t_screendimensions;
 
-typedef struct s_minimap
+typedef struct s_minimap_dims
 {
-	int	rect_height;
-	int	rect_width;
-	int	y;
-	int	x;
-}		t_minimap;
+	uint16_t	square;
+	uint16_t	height;
+	uint16_t	width;
+}	t_minimap_dims;
+
+typedef struct s_minimap_help
+{
+	int			y;
+	int			x;
+	mlx_image_t	*img;
+	mlx_t		*mlx;
+}		t_minimap_help;
 
 typedef enum e_minimapcolours
 {
 	VOID_COLOUR = 0x010000,
 	SPACE_COLOUR = 0xF73E3E,
 	WALL_COLOUR = 0x3EF776,
-	PLAYER_COLOUR = 0xff8f00 
+	PLAYER_COLOUR = 0xFFFFFF 
 }	t_minimapcolours;
+
+typedef enum e_player
+{
+	MODE_X,
+	MODE_Y
+}	t_player;
 
 char	*read_file(int	fd);
 int		safe_atoi(const char *str, int	*result);
