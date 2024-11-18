@@ -1,55 +1,65 @@
 
 #include "../../cub3d.h"
 
-t_error	parse_rgb(const char *str, size_t *idx, t_rgb *rgb)
+static int	skip_separators(t_in_stream *stream)
+{
+	skip_chars(" ", stream);
+	if (cur_char(stream) != ',')
+	{
+		put_parsing_err(stream, "Missing separator");
+		put_err(RED "Expected: \",\"\n" RESET_COLOR);
+		return (-1);
+	}
+	stream->idx++;
+	skip_chars(" ", stream);
+	return (0);
+}
+
+static t_error	parse_rgb_component(t_in_stream *stream, u_int8_t *comp)
 {
 	int	temp;
 
-	temp = 0;
+	if (safe_atoi(cur_ptr(stream), &temp) == -1 || temp < 0 || temp > 255)
+	{
+		put_parsing_err(stream, "Invalid number");
+		put_err(RED "Number must be between 0 and 255" RESET_COLOR);
+		return (-1);
+	}
+	*comp = temp;
+	skip_num(stream);
+	return (0);
+}
+
+t_error	parse_rgb(t_in_stream *stream, t_rgb *rgb)
+{
+	const char	*keyword_pos;
+
+	keyword_pos = cur_ptr(stream);
 	// skip keyword
-	(*idx) += 2;
-	skip_whitespaces(str, idx);
+	stream->idx += 2;
+	skip_chars(" ", stream);
 	// parse r
-	if (safe_atoi(&str[*idx], &temp) == -1 || temp < 0 || temp > 255)
+	if (parse_rgb_component(stream, &rgb->r) == -1)
 	{
-		put_err("wrong nb"); // TODO: add correct msg (overflow or just - or +)
 		return (-1);
 	}
-	rgb->r = temp;
-	skip_num(str, idx);
-	skip_whitespaces(str, idx);
-	if (str[*idx] != ',')
+	if (skip_separators(stream) == -1)
 	{
-		put_err("syntax error"); // TODO: add correct msg (Syntax error)
 		return (-1);
 	}
-	(*idx)++;
-
 	// parse g
-	skip_whitespaces(str, idx);
-	if (safe_atoi(&str[*idx], &temp) == -1 || temp < 0 || temp > 255)
+	if (parse_rgb_component(stream, &rgb->g) == -1)
 	{
-		put_err("wrong number"); // TODO: add correct msg (overflow or just - or +)
 		return (-1);
 	}
-	rgb->g = temp;
-	skip_num(str, idx);
-	skip_whitespaces(str, idx);
-	if (str[*idx] != ',')
+	if (skip_separators(stream) == -1)
 	{
-		put_err("syntax error"); // TODO: add correct msg (Syntax error)
 		return (-1);
 	}
-	(*idx)++;
-
 	// parse b
-	skip_whitespaces(str, idx);
-	if (safe_atoi(&str[*idx], &temp) == -1 || temp < 0 || temp > 255)
+	if (parse_rgb_component(stream,&rgb->b) == -1)
 	{
-		put_err("wrong number"); // TODO: add correct msg (overflow or just - or +)
 		return (-1);
 	}
-	rgb->b = temp;
-	skip_num(str, idx);
 	return (0);
 }

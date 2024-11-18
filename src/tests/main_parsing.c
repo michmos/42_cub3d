@@ -32,8 +32,11 @@ int	main(int argc, char *argv[])
 		put_err(USAGE);
 		return (1);
 	}
+	ft_bzero(&input, sizeof(t_input));
 	if (parse_file(&input, argv[1]) == -1)
+	{
 		return 1;
+	}
 	test_put_input(&input);
 	free_input(&input);
 	return (0);

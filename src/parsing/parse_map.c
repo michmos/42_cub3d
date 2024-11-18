@@ -66,49 +66,52 @@ static size_t	get_height(const char *map_str)
 	return (height);
 }
 
-static int	rmng_syntax_is_crrct(const char *str)
+static int	rmng_syntax_is_crrct(t_in_stream *stream)
 {
 	bool 	outside_of_map;
-	size_t	i;
 
 	outside_of_map = false;
-	i = 0;
-	while (str[i])
+	while (cur_char(stream))
 	{
 		if (!outside_of_map)
 		{
-			if (str[i] == '\n' && !line_blngs_to_map(&str[i + 1]))
+			if (cur_char(stream) == '\n' && !line_blngs_to_map(cur_ptr(stream) + 1))
 			{
 				outside_of_map = true;
 			}
-			else if (!is_valid_map_char(str[i]) && str[i] != '\n')
+			else if (!is_valid_map_char(cur_char(stream)) && cur_char(stream) != '\n')
 			{
-				ft_printf_fd(STDERR_FILENO, "Error detected when parsing map: Unvalid character \"%c\"", *str);
+				put_parsing_err(stream, "Invalid map char");
 				return (false);
 			}
 		}
-		else if (!ft_is_whitespace(str[i]))
+		else if (!ft_is_whitespace(cur_char(stream)))
 		{
-			ft_printf_fd(STDERR_FILENO, "Error detected when parsing map: Found character \"%c\" when expecting EOF", *str);
+			put_parsing_err(stream, "Unexpected token");
+			ft_printf_fd(STDERR_FILENO, RED "Expected: EOF" RESET_COLOR);
 			return (false);
 		}
-		i++;
+		stream->idx++;
 	}
 	return (true);
 }
 
-t_error	parse_map(const char *str, size_t *idx, t_map *map)
+t_error	parse_map(t_in_stream *stream, t_map *map)
 {
 	size_t	width;
 	size_t	i;
 	char	*nl_ptr;
+	t_in_stream	bckup;
 
-	if (!rmng_syntax_is_crrct(&str[*idx]))
+	bckup = *stream;
+	if (!rmng_syntax_is_crrct(stream))
 	{
 		return (-1);
 	}
-	map->height = get_height(&str[*idx]);
-	map->width = get_max_width(&str[*idx], map->height);
+	*stream = bckup;
+
+	map->height = get_height(cur_ptr(stream));
+	map->width = get_max_width(cur_ptr(stream), map->height);
 	map->map = ft_calloc((map->height * map->width) + 1, sizeof(char));
 	if (!map->map)
 	{
@@ -119,10 +122,10 @@ t_error	parse_map(const char *str, size_t *idx, t_map *map)
 	i = 0;
 	while (i < map->height)
 	{
-		width = get_line_len(&str[*idx]);
-		ft_memcpy(&map->map[ft_strlen(map->map)], &str[*idx], width);
+		width = get_line_len(cur_ptr(stream));
+		ft_memcpy(&map->map[ft_strlen(map->map)], cur_ptr(stream), width);
 		append_char(map->map, VOID, map->width - width);
-		*idx += width + 1;
+		stream->idx += width + 1;
 		i++;
 	}
 	return (0);

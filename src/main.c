@@ -16,6 +16,7 @@ int	main(int argc, char *argv[])
 	{
 		return (-1);
 	}
+	free_input(&input);
 	return (0);
 }
 
