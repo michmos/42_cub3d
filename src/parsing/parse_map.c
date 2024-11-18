@@ -68,16 +68,16 @@ static size_t	get_height(const char *map_str)
 
 static int	rmng_syntax_is_crrct(t_in_stream *stream)
 {
-	bool 	outside_of_map;
+	bool 	inside_map;
 
-	outside_of_map = false;
+	inside_map = true;
 	while (cur_char(stream))
 	{
-		if (!outside_of_map)
+		if (inside_map)
 		{
 			if (cur_char(stream) == '\n' && !line_blngs_to_map(cur_ptr(stream) + 1))
 			{
-				outside_of_map = true;
+				inside_map = false;
 			}
 			else if (!is_valid_map_char(cur_char(stream)) && cur_char(stream) != '\n')
 			{
