@@ -6,7 +6,7 @@
 /*   By: dode-boe <dode-boe@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/11/05 14:37:08 by dode-boe      #+#    #+#                 */
-/*   Updated: 2024/11/16 19:37:42 by dode-boe      ########   odam.nl         */
+/*   Updated: 2024/11/18 14:54:18 by dode-boe      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ int	draw_minimap(t_map *map)
 	if (!map_img)
 		my_mlx_error(mlx);
 	color_player(plr_img, map, mlx);
-	mlx_image_to_window()
+	mlx_image_to_window();
 	mlx_loop(mlx);
 	mlx_terminate(mlx);
 }
