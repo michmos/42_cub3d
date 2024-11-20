@@ -186,15 +186,15 @@ int	colour(char c)
 	return (-1);
 }
 
-int	main(void)
-{
-	const char	*map = "11111111111000000E011111111111";
-	t_map	smap;
-
-	smap.map = map;
-	smap.height = 3;
-	smap.width = 10;
-
-	draw_minimap(&smap);
-	return (0);
-}
+// int	main(void)
+// {
+// 	const char	*map = "11111111111000000E011111111111";
+// 	t_map	smap;
+//
+// 	smap.map = map;
+// 	smap.height = 3;
+// 	smap.width = 10;
+//
+// 	draw_minimap(&smap);
+// 	return (0);
+// }

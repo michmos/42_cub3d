@@ -1,5 +1,5 @@
 
-#include "../../cub3d.h"
+#include "../cub3d.h"
 
 void	free_input(t_input *input)
 {

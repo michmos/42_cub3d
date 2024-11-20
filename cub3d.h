@@ -2,8 +2,8 @@
 #ifndef CUB3D_H
 # define CUB3D_H
 
-#include <stddef.h>
-#include <sys/types.h>
+# include <stddef.h>
+# include <sys/types.h>
 # include <unistd.h>
 # include <stdio.h>
 # include <fcntl.h>
@@ -13,14 +13,16 @@
 # include "external_libs/MLX42/include/MLX42/MLX42.h"
 # include "colors.h"
 
-# define USAGE "USAGE: ./cub3d <map>"
+# define USAGE_ERR "USAGE: ./cub3d <map>"
+# define BLOCK_SIZE_ERR "BLOCK_SIZE needs to be a power of two for performance reasons"
 
 # define WINDOW_WIDTH 1024
-# define WINDO_HEIGHT 512
-# define READ_BUF_SIZE 100	// size of chunk of bytes to read config file
-# define FOV 60				// Field of view in degrees
-# define BLOCK_SIZE 64		// in pixel
-# define PLAYER_SIZE 32		// in pixel
+# define WINDOW_HEIGHT 512
+# define READ_BUF_SIZE 100							// size of chunk of bytes to read config file
+# define FOV 60										// Field of view in degrees
+# define BLOCK_SIZE 64								// in pixel
+# define LOG2_BLOCKS_SIZE ((int) log2(BLOCK_SIZE))	// used for bit shifting when div or mult
+# define PLAYER_SIZE 32								// in pixel
 
 typedef char t_error;
 typedef double t_rad;
@@ -98,16 +100,26 @@ typedef t_vec t_cor_bl;
 // coordinates in pixel
 typedef t_vec t_cor_px;
 
+typedef struct s_ray
+{
+	t_deg		angle;				// angle in deg
+	t_cor_px	intersec;			// coordinates of intersection with wall block
+	bool		vrtcl_intersec;		// type of intersec
+	double		ray_distance;		// distance to wall intersec
+	double		actual_distance;	// undistorted distance
+} t_ray;
+
 typedef struct	s_view
 {
 	t_deg		dir_angle;		// current orientation of player (direction)
 	size_t		plane_distance; // distance between player and plane
 } t_view;
 
-
 typedef struct s_cub3d
 {
 	mlx_t		*mlx;			// mlx window
+	mlx_image_t	*cur_img;
+	mlx_image_t	*nxt_img;
 	t_map		map;			// map data
 	t_view		view;			// viewing field
 	t_cor_px	player_px;		// player position in pixel
@@ -152,15 +164,33 @@ typedef enum e_player
 	MODE_Y
 }	t_player;
 
+////////////////////////////////////////////////////////////////////////////////
+// parsing																	  //
+////////////////////////////////////////////////////////////////////////////////
+
+// read_file.c =------------------------------------------------------------- //
 char	*read_file(int	fd);
-int		safe_atoi(const char *str, int	*result);
-t_error	parse_rgb(t_in_stream *stream, t_rgb *rgb);
+
+// parse_file.c ------------------------------------------------------------- //
 t_error	parse_file(t_input *input, const char *map_path);
-t_error	parse_txtre_path(t_in_stream *stream, char **txtre_path);
+
+// parse_map.c -------------------------------------------------------------- //
 t_error	parse_map(t_in_stream *stream, t_map *map);
 bool	is_valid_map_char(char c);
 
+// parse_rgb.c -------------------------------------------------------------- //
+t_error	parse_rgb(t_in_stream *stream, t_rgb *rgb);
 
+// parse_txtre_path.c ------------------------------------------------------- //
+t_error	parse_txtre_path(t_in_stream *stream, char **txtre_path);
+
+// put_errors.c ------------------------------------------------------------- //
+void		put_parsing_err(t_in_stream *stream, const char *msg);
+void		put_expected_tokens(int input_flags);
+
+// utils.c ------------------------------------------------------------------ //
+void	put_cur_line(int fd, t_in_stream *stream);
+void	put_cur_word(int fd, const char *str);
 void	skip_num(t_in_stream *stream);
 void	skip_whitespaces(t_in_stream *stream);
 void	skip_chars(const char *charset, t_in_stream *stream);
@@ -169,38 +199,41 @@ char	*cur_ptr(t_in_stream *stream);
 void	append_char(char *str, char c, size_t n);
 size_t	get_line_len(const char *str);
 int		safe_atoi(const char *str, int	*result);
-void	put_cur_line(int fd, t_in_stream *stream);
-void	put_cur_word(int fd, const char *str);
-
-void	free_input(t_input *input);
 
 
-void	put_parsing_err(t_in_stream *stream, const char *msg);
-void	put_expected_tokens(int input_flags);
-
-
-
-// xxxxxxx.c ---------------------------------------------------------------- //
+////////////////////////////////////////////////////////////////////////////////
+// ray_casting																  //
+////////////////////////////////////////////////////////////////////////////////
 
 // init_cub3d.c ------------------------------------------------------------- //
-t_error	init_cub3d(t_cub3d *cub3d, t_input *input);
+t_error		init_cub3d(t_cub3d *cub3d, t_input *input);
 
 // intersec_hit.c ----------------------------------------------------------- //
 t_cor_px	get_ver_intersec_hit(t_cor_px pov, t_deg ray_angle, t_map *map);
 t_cor_px	get_hor_intersec_hit(t_cor_px pov, t_deg ray_angle, t_map *map);
 
 // ray_distance.c ----------------------------------------------------------- //
-double	get_distance_to_wall(t_deg ray_angle, t_cor_px pov, t_deg view_dir, t_map *map);
+void		find_distance_to_wall(t_ray	*ray, t_cor_px pov, t_deg view_angle, t_map *map);
+
+// draw_view.c -------------------------------------------------------------- //
+t_error draw_view(t_cub3d *cub3d);
 
 // conversions.c ------------------------------------------------------------ //
-double	rad_to_deg(t_rad radians);
-double	deg_to_rad(t_deg degrees);
+double		rad_to_deg(t_rad radians);
+double		deg_to_rad(t_deg degrees);
 t_cor_bl	cor_px_to_bl(t_cor_px cor);
 
+
+
 // utils.c ------------------------------------------------------------------ //
-bool	is_wall(t_cor_bl cor, t_map *map);
-t_deg	sum_angle(t_deg angle1, t_deg angle2);
-t_error	redraw_img(t_cub3d *cub3d, mlx_image_t **img, t_error (*redraw_foo)(t_cub3d *, mlx_image_t *));
-int		safe_atoi(const char *str, int	*result);
+bool		is_wall(t_cor_bl cor, t_map *map);
+t_deg		sum_angle(t_deg angle1, t_deg angle2);
+int			safe_atoi(const char *str, int	*result);
+bool		is_in_map(t_cor_bl cor, t_map *map);
+u_int32_t	mult_by_block_size(u_int32_t num);
+u_int32_t	div_by_block_size(u_int32_t num);
+
+// cleanup.c ---------------------------------------------------------------- //
+void	free_input(t_input *input);
 
 #endif // !CUB3D_H

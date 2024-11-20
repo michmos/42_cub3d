@@ -6,6 +6,9 @@ static bool	did_overflow(int sign, int prev_num, int num)
 	return ((sign == 1 && prev_num > num) || (sign == -1 && prev_num < num));
 }
 
+// atoi with error detection.
+// returns 0 on success. 
+// returns -1 in case of overflow or uncexpected char.
 int	safe_atoi(const char *str, int	*result)
 {
 	size_t	i;
