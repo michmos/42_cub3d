@@ -15,6 +15,8 @@
 
 # define USAGE "USAGE: ./cub3d <map>"
 
+# define WINDOW_WIDTH 1024
+# define WINDO_HEIGHT 512
 # define READ_BUF_SIZE 100	// size of chunk of bytes to read config file
 # define FOV 60				// Field of view in degrees
 # define BLOCK_SIZE 64		// in pixel
@@ -102,16 +104,10 @@ typedef struct	s_view
 	size_t		plane_distance; // distance between player and plane
 } t_view;
 
-typedef struct	s_window
-{
-	mlx_t 	*mlx;
-	size_t	width;				// in pixel
-	size_t	height;				// in pixel
-} t_window;
 
 typedef struct s_cub3d
 {
-	t_window	window;			// mlx window data
+	mlx_t		*mlx;			// mlx window
 	t_map		map;			// map data
 	t_view		view;			// viewing field
 	t_cor_px	player_px;		// player position in pixel
