@@ -38,3 +38,8 @@ int	safe_atoi(const char *str, int	*result)
 	*result = num;
 	return (0);
 }
+
+bool	is_wall(t_cor_bl cor, t_map *map)
+{
+	return (map->map[cor.y * map->width + cor.x] == WALL);
+}

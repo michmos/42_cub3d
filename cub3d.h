@@ -7,14 +7,22 @@
 # include <unistd.h>
 # include <stdio.h>
 # include <fcntl.h>
+# include <assert.h>
+# include <math.h>
 # include "external_libs/42_libs/ft_libs.h"
 # include "external_libs/MLX42/include/MLX42/MLX42.h"
 # include "colors.h"
 
 # define USAGE "USAGE: ./cub3d <map>"
-# define READ_BUF_SIZE 100
+
+# define READ_BUF_SIZE 100	// size of chunk of bytes to read config file
+# define FOV 60				// Field of view in degrees
+# define BLOCK_SIZE 64		// in pixel
+# define PLAYER_SIZE 32		// in pixel
 
 typedef char t_error;
+typedef double t_rad;
+typedef double t_deg;
 
 typedef enum e_fields
 {
@@ -46,6 +54,7 @@ typedef union u_rgb
 		u_int8_t r;
 		u_int8_t g;
 		u_int8_t b;
+		u_int8_t a;
 	};
 	int	rgb;
 } t_rgb;
@@ -62,7 +71,6 @@ typedef struct s_map
 	char	*map;
 	size_t	width;
 	size_t	height;
-
 } t_map;
 
 typedef struct s_input
@@ -82,19 +90,31 @@ typedef struct s_vec
 	u_int32_t	y;
 } t_vec;
 
-typedef struct	s_txts
+// coordinates in blocks
+typedef t_vec t_cor_bl;
+
+// coordinates in pixel
+typedef t_vec t_cor_px;
+
+typedef struct	s_view
 {
-	char	*north_txt;
-	char	*south_txt;
-	char	*west_txt;
-	char	*east_txt;
-} t_txts;
+	t_deg		dir_angle;		// current orientation of player (direction)
+	size_t		plane_distance; // distance between player and plane
+} t_view;
+
+typedef struct	s_window
+{
+	mlx_t 	*mlx;
+	size_t	width;				// in pixel
+	size_t	height;				// in pixel
+} t_window;
 
 typedef struct s_cub3d
 {
-	char	**map;
-	t_vec	player_pos;
-
+	t_window	window;			// mlx window data
+	t_map		map;			// map data
+	t_view		view;			// viewing field
+	t_cor_px	player_px;		// player position in pixel
 }	t_cub3d;
 
 typedef enum e_screendimensions
@@ -161,5 +181,27 @@ void	free_input(t_input *input);
 
 void	put_parsing_err(t_in_stream *stream, const char *msg);
 void	put_expected_tokens(int input_flags);
+
+
+
+// xxxxxxx.c ---------------------------------------------------------------- //
+
+// init_cub3d.c ------------------------------------------------------------- //
+t_error	init_cub3d(t_cub3d *cub3d, t_input *input);
+
+// intersec_hit.c ----------------------------------------------------------- //
+t_cor_px	get_ver_intersec_hit(t_cor_px pov, t_deg ray_angle, t_map *map);
+t_cor_px	get_hor_intersec_hit(t_cor_px pov, t_deg ray_angle, t_map *map);
+
+// ray_distance.c ----------------------------------------------------------- //
+double	get_distance_to_wall(t_deg ray_angle, t_cor_px pov, t_deg view_dir, t_map *map);
+
+// conversions.c ------------------------------------------------------------ //
+double	rad_to_deg(t_rad radians);
+double	deg_to_rad(t_deg degrees);
+t_cor_bl	cor_px_to_bl(t_cor_px cor);
+
+// utils.c ------------------------------------------------------------------ //
+bool	is_wall(t_cor_bl cor, t_map *map);
 
 #endif // !CUB3D_H
