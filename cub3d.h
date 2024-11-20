@@ -203,5 +203,8 @@ t_cor_bl	cor_px_to_bl(t_cor_px cor);
 
 // utils.c ------------------------------------------------------------------ //
 bool	is_wall(t_cor_bl cor, t_map *map);
+t_deg	sum_angle(t_deg angle1, t_deg angle2);
+t_error	redraw_img(t_cub3d *cub3d, mlx_image_t **img, t_error (*redraw_foo)(t_cub3d *, mlx_image_t *));
+int		safe_atoi(const char *str, int	*result);
 
 #endif // !CUB3D_H
