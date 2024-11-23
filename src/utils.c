@@ -1,40 +1,46 @@
 
 #include "../cub3d.h"
 
-static bool	did_overflow(int sign, int prev_num, int num)
+// returns true if wall found at cor
+bool	is_wall(t_cor_bl cor, t_map *map)
 {
-	return ((sign == 1 && prev_num > num) || (sign == -1 && prev_num < num));
+	assert(cor.y < map->height);
+	assert(cor.x < map->width);
+	return (map->map[cor.y * map->width + cor.x] == WALL);
 }
 
-int	safe_atoi(const char *str, int	*result)
+// returns true if block cordinate is inside map boundaries
+bool	is_in_map(t_cor_bl cor, t_map *map)
 {
-	size_t	i;
-	int		num;
-	int		prev;
-	int		sign;
+	return (cor.x < map->width && cor.y < map->height);
+}
 
-	i = 0;
-	sign = 1;
-	if (str[i] == '-' || str[i] == '+')
+// returns sum ensuring 0 <= sum < 360
+t_deg	sum_angle(t_deg angle1, t_deg angle2)
+{
+	t_deg	sum;
+
+	sum = angle1 + angle2;
+	if (sum >= 360)
 	{
-		if (str[i] == '-')
-			sign *= -1;
-		i++;
+		sum -= 360;
 	}
-	num = 0;
-	while (str[i] >= '0' && str[i] <= '9')
+	else if (sum < 0)
 	{
-		// check for overflow
-		prev = num;
-		num = (num * 10) + sign * (str[i] - '0');
-		if (did_overflow(sign, prev, num))
-			return (-1);
-		i++;
+		sum += 360;
 	}
-	if (i == 1 && (str[0] == '+' || str[0] == '-'))
-	{
-		return (-1);
-	}
-	*result = num;
-	return (0);
+	return (sum);
+}
+
+
+// divide by block size through bit shifting
+u_int32_t	div_by_block_size(u_int32_t num)
+{
+	return (num >> LOG2_BLOCKS_SIZE);
+}
+
+// multiply by block size through bit shifting
+u_int32_t	mult_by_block_size(u_int32_t num)
+{
+	return (num << LOG2_BLOCKS_SIZE);
 }
