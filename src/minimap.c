@@ -6,7 +6,7 @@
 /*   By: dode-boe <dode-boe@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/11/05 14:37:08 by dode-boe      #+#    #+#                 */
-/*   Updated: 2024/11/18 19:07:34 by dode-boe      ########   odam.nl         */
+/*   Updated: 2024/11/21 17:36:38 by dode-boe      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,8 +16,8 @@ int				colour(char c);
 int				my_mlx_error(mlx_t *mlx);
 int				color_rectangles(t_map *map, mlx_t *mlx, mlx_image_t *img, t_minimap_dims minimap);
 int				color_rectangle(t_map *map, t_minimap_help *help, t_minimap_dims dims);
-void			color_player(mlx_image_t *img, t_map *map, mlx_t *mlx, t_minimap_dims minimap);
-t_vec			get_plr_pos(t_map *map);
+void			color_player(mlx_image_t *img, t_map *map, t_minimap_dims minimap);
+t_vec			get_plr_pos(t_map *map, u_int8_t offset);
 t_minimap_dims	get_bs_dims(t_map *map);
 
 int	draw_minimap(t_map *map)
@@ -41,12 +41,37 @@ int	draw_minimap(t_map *map)
 	plr_img = mlx_new_image(mlx, minimap.width / map->width, minimap.height / map->height);
 	if (!map_img)
 		my_mlx_error(mlx);
-	color_player(plr_img, map, mlx, minimap);
+	color_player(plr_img, map, minimap);
 
-	plr_pos = get_plr_pos(map);
+	plr_pos = get_plr_pos(map, minimap.square);
 	mlx_image_to_window(mlx, plr_img, plr_pos.x * minimap.square, plr_pos.y * minimap.square);
+	plr_pos.x = plr_pos.x * BLOCK + BLOCK / 2; // TODO: replace with internal block size, which is 64 pixels if I remember correctly
+	plr_pos.y += plr_pos.y * BLOCK + BLOCK / 2;
 	mlx_loop(mlx);
 	mlx_terminate(mlx);
+	return (0);
+}
+
+void	keyhook(mlx_key_data_t keydata, void *param)
+{
+	if (keydata.key == MLX_KEY_W && keydata.action == MLX_PRESS)
+		move((t_cub3d *)param, FORWARD);
+	if (keydata.key == MLX_KEY_S && keydata.action == MLX_PRESS)
+		move((t_cub3d *)param, BACKWARD);
+	if (keydata.key == MLX_KEY_A && keydata.action == MLX_PRESS)
+		rotate((t_cub3d *)param, COUNTER_CLOCKWISE);
+	if (keydata.key == MLX_KEY_D && keydata.action == MLX_PRESS)
+		rotate((t_cub3d *)param, CLOCKWISE);
+}
+
+void	move(t_cub3d *cub, t_movedata dir)
+{
+	if (cub->player_pos.x % BLOCK);
+}
+
+void	rotate(t_cub3d *cub, t_movedata dir)
+{
+	;
 }
 
 t_minimap_dims	get_bs_dims(t_map *map)
@@ -73,14 +98,14 @@ bool	is_player_pos(char c)
 	return ( c == PLAYER_EAST || c == PLAYER_NORTH || c == PLAYER_WEST || c == PLAYER_SOUTH);
 }
 
-t_vec	get_plr_pos(t_map *map)
+t_vec	get_plr_pos(t_map *map, u_int8_t offset)
 {
 	size_t	i;
 
 	i = 0;
 	while (!is_player_pos(map->map[i]))
 		i++;
-	return ((t_vec) { .x = i % map->width, .y = i / map->width });
+	return ((t_vec) { .x = i % map->width, .y = i / map->width});
 }
 
 // int	plr_pos(t_map *map, t_player mode)
@@ -131,20 +156,18 @@ int	color_rectangles(t_map *map, mlx_t *mlx, mlx_image_t *img, t_minimap_dims mi
 	return (0);
 }
 
-void	color_player(mlx_image_t *img, t_map *map, mlx_t *mlx, t_minimap_dims minimap)
+void	color_player(mlx_image_t *img, t_map *map, t_minimap_dims minimap)
 {
 	int	x;
 	int	y;
-	int	x_max;
-	int	y_max;
+	int	max;
 
-	y = 0;
-	y_max = minimap.height / map->height;
-	x_max = minimap.width / map->width;
-	while (y < y_max)
+	y = 0 + minimap.square / 4;
+	max = minimap.square - minimap.square / 4;
+	while (y < max)
 	{
-		x = 0;
-		while (x < x_max)
+		x = 0 + minimap.square / 4;
+		while (x < max)
 		{
 			mlx_put_pixel(img, x, y, PLAYER_COLOUR);
 			x++;
@@ -175,6 +198,7 @@ int	color_rectangle(t_map *map, t_minimap_help *help, t_minimap_dims dims)
 		}
 		y++;
 	}
+	return (0);
 }
 
 int	colour(char c)
@@ -188,7 +212,7 @@ int	colour(char c)
 
 int	main(void)
 {
-	const char	*map = "11111111111000000E011111111111";
+	char	*map = "11111111111000000E011111111111";
 	t_map	smap;
 
 	smap.map = map;

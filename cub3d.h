@@ -136,6 +136,14 @@ typedef enum e_player
 	MODE_Y
 }	t_player;
 
+typedef enum e_movedata
+{
+	FORWARD,
+	BACKWARD,
+	COUNTER_CLOCKWISE,
+	CLOCKWISE
+}	t_movedata;
+
 char	*read_file(int	fd);
 int		safe_atoi(const char *str, int	*result);
 t_error	parse_rgb(t_in_stream *stream, t_rgb *rgb);
