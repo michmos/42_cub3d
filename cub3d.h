@@ -23,6 +23,8 @@
 # define BLOCK_SIZE 64								// in pixel
 # define LOG2_BLOCKS_SIZE ((int) log2(BLOCK_SIZE))	// used for bit shifting when div or mult
 # define PLAYER_SIZE 32								// in pixel
+# define MOVE_DISTANCE 4
+# define ROTATE_AMT 2
 
 typedef char t_error;
 typedef double t_rad;
@@ -164,22 +166,19 @@ typedef enum e_player
 	MODE_Y
 }	t_player;
 
-<<<<<<< HEAD
 typedef enum e_movedata
 {
+	COUNTER_CLOCKWISE = 1,
+	CLOCKWISE = -1,
 	FORWARD,
-	BACKWARD,
-	COUNTER_CLOCKWISE,
-	CLOCKWISE
+	BACKWARD
 }	t_movedata;
 
-=======
 ////////////////////////////////////////////////////////////////////////////////
 // parsing																	  //
 ////////////////////////////////////////////////////////////////////////////////
 
 // read_file.c =------------------------------------------------------------- //
->>>>>>> main
 char	*read_file(int	fd);
 
 // parse_file.c ------------------------------------------------------------- //

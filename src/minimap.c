@@ -6,7 +6,7 @@
 /*   By: dode-boe <dode-boe@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/11/05 14:37:08 by dode-boe      #+#    #+#                 */
-/*   Updated: 2024/11/21 17:36:38 by dode-boe      ########   odam.nl         */
+/*   Updated: 2024/11/24 17:25:08 by dode-boe      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,8 +45,8 @@ int	draw_minimap(t_map *map)
 
 	plr_pos = get_plr_pos(map, minimap.square);
 	mlx_image_to_window(mlx, plr_img, plr_pos.x * minimap.square, plr_pos.y * minimap.square);
-	plr_pos.x = plr_pos.x * BLOCK + BLOCK / 2; // TODO: replace with internal block size, which is 64 pixels if I remember correctly
-	plr_pos.y += plr_pos.y * BLOCK + BLOCK / 2;
+	plr_pos.x = plr_pos.x * BLOCK_SIZE + BLOCK_SIZE / 2; // TODO: replace with internal block size, which is 64 pixels if I remember correctly
+	plr_pos.y += plr_pos.y * BLOCK_SIZE + BLOCK_SIZE / 2;
 	mlx_loop(mlx);
 	mlx_terminate(mlx);
 	return (0);
@@ -66,12 +66,31 @@ void	keyhook(mlx_key_data_t keydata, void *param)
 
 void	move(t_cub3d *cub, t_movedata dir)
 {
-	if (cub->player_pos.x % BLOCK);
+	t_cor_px	new;
+
+	new = new_pos(cub, dir);
+	if (is_in_map(cor_px_to_bl((t_cor_px) {new.x, cub->player_px.y}), cub->map.map)
+		&& is_in_map(cor_px_to_bl((t_cor_px) {new.y, cub->player_px.x}), cub->map.map))
+	{
+		cub->player_px.x = new.x;
+		cub->player_px.y = new.y;
+		update(cub);
+	}
+}
+
+t_cor_px	new_pos(t_cub3d *cub, t_movedata dir)
+{
+	uint32_t	x;
+	uint32_t	y;
+
+	x = cos(cub->view.dir_angle) * MOVE_DISTANCE;
+	y = sin(cub->view.dir_angle) * MOVE_DISTANCE;
+	return (t_cor_px) {x, y};
 }
 
 void	rotate(t_cub3d *cub, t_movedata dir)
 {
-	;
+	cub->view.dir_angle += ROTATE_AMT * dir % 360;
 }
 
 t_minimap_dims	get_bs_dims(t_map *map)
@@ -210,20 +229,6 @@ int	colour(char c)
 	return (-1);
 }
 
-<<<<<<< HEAD
-int	main(void)
-{
-	char	*map = "11111111111000000E011111111111";
-	t_map	smap;
-
-	smap.map = map;
-	smap.height = 3;
-	smap.width = 10;
-
-	draw_minimap(&smap);
-	return (0);
-}
-=======
 // int	main(void)
 // {
 // 	const char	*map = "11111111111000000E011111111111";
@@ -236,4 +241,3 @@ int	main(void)
 // 	draw_minimap(&smap);
 // 	return (0);
 // }
->>>>>>> main
