@@ -2,22 +2,22 @@
 #include "../cub3d.h"
 #include <sys/types.h>
 #include <unistd.h>
-
-void	put_scaled_vertical(mlx_image_t *dst_img, mlx_image_t *src_img, size_t new_height, size_t x, size_t y)
-{
-	double	scale_factor;
-	size_t	i;
-
-	scale_factor = (double) new_height / src_img->height;
-
-	i = 0;
-	while (i < new_height)
-	{
-		mlx_put_pixel(dst_img, x, y, get_pxl_rgba(src_img, y / scale_factor, x));
-		i++;
-		y++;
-	}
-}
+//
+// void	put_scaled_vertical(mlx_image_t *dst_img, mlx_image_t *src_img, size_t new_height, size_t x, size_t y)
+// {
+// 	double	scale_factor;
+// 	size_t	i;
+//
+// 	scale_factor = (double) new_height / src_img->height;
+//
+// 	i = 0;
+// 	while (i < new_height)
+// 	{
+// 		mlx_put_pixel(dst_img, x, y, get_pxl_rgba(src_img, y / scale_factor, x));
+// 		i++;
+// 		y++;
+// 	}
+// }
 
 typedef struct s_imgs
 {

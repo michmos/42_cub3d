@@ -61,7 +61,7 @@ u_int32_t get_rgba(int r, int g, int b, int a)
 }
 
 // returns the rgb value of pixel x, y in img
-u_int32_t	get_pxl_rgba(mlx_image_t *img, int y, int x)
+t_rgb	get_pxl_rgba(mlx_image_t *img, int y, int x)
 {
 	size_t	pixel_index;
 	uint8_t	*pixel_data;
@@ -69,5 +69,5 @@ u_int32_t	get_pxl_rgba(mlx_image_t *img, int y, int x)
 	pixel_index = img->width * y + x;
 	// multiply by 4 to account for r, g, b, a
 	pixel_data = &img->pixels[pixel_index * 4];
-	return (get_rgba(pixel_data[0], pixel_data[1], pixel_data[2], pixel_data[3]));
+	return ((t_rgb){.r = pixel_data[3], .g = pixel_data[2], .b = pixel_data[1], .a = pixel_data[0]});
 }
