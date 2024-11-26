@@ -1,12 +1,21 @@
 
 #include "../cub3d.h"
+#include <sys/types.h>
+
+// returns char in map at cor
+char	get_map_char(t_cor_bl cor, t_map *map)
+{
+	assert(cor.y < map->height);
+	assert(cor.x < map->width);
+	return (map->map[cor.y * map->width + cor.x]);
+}
 
 // returns true if wall found at cor
 bool	is_wall(t_cor_bl cor, t_map *map)
 {
 	assert(cor.y < map->height);
 	assert(cor.x < map->width);
-	return (map->map[cor.y * map->width + cor.x] == WALL);
+	return (get_map_char(cor, map) == WALL);
 }
 
 // returns true if block cordinate is inside map boundaries
@@ -43,4 +52,22 @@ u_int32_t	div_by_block_size(u_int32_t num)
 u_int32_t	mult_by_block_size(u_int32_t num)
 {
 	return (num << LOG2_BLOCKS_SIZE);
+}
+
+// returns the rgb value
+u_int32_t get_rgba(int r, int g, int b, int a)
+{
+    return (r << 24 | g << 16 | b << 8 | a);
+}
+
+// returns the rgb value of pixel x, y in img
+u_int32_t	get_pxl_rgba(mlx_image_t *img, int y, int x)
+{
+	size_t	pixel_index;
+	uint8_t	*pixel_data;
+
+	pixel_index = img->width * y + x;
+	// multiply by 4 to account for r, g, b, a
+	pixel_data = &img->pixels[pixel_index * 4];
+	return (get_rgba(pixel_data[0], pixel_data[1], pixel_data[2], pixel_data[3]));
 }
