@@ -15,8 +15,7 @@ bool	is_wall(t_cor_bl cor, t_map *map)
 {
 	assert(cor.y < map->height);
 	assert(cor.x < map->width);
-	return (get_map_char(cor, map) == WALL
-		 || get_map_char(cor, map) == SPACE);
+	return (get_map_char(cor, map) == WALL);
 }
 
 // returns true if block cordinate is inside map boundaries
