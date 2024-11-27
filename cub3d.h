@@ -171,7 +171,9 @@ typedef enum e_movedata
 	COUNTER_CLOCKWISE = 1,
 	CLOCKWISE = -1,
 	FORWARD,
-	BACKWARD
+	BACKWARD,
+	LEFT,
+	RIGHT
 }	t_movedata;
 
 ////////////////////////////////////////////////////////////////////////////////
