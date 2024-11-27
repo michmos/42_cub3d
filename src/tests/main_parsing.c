@@ -41,3 +41,9 @@ int	main(int argc, char *argv[])
 	free_input(&input);
 	return (0);
 }
+
+
+1 1 1 1
+1 0 1 1
+1 1 E 1
+1 1 1 1

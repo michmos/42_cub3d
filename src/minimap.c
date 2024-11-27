@@ -6,7 +6,7 @@
 /*   By: dode-boe <dode-boe@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/11/05 14:37:08 by dode-boe      #+#    #+#                 */
-/*   Updated: 2024/11/24 17:25:08 by dode-boe      ########   odam.nl         */
+/*   Updated: 2024/11/27 17:36:16 by dode-boe      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ void			color_player(mlx_image_t *img, t_map *map, t_minimap_dims minimap);
 t_vec			get_plr_pos(t_map *map, u_int8_t offset);
 t_minimap_dims	get_bs_dims(t_map *map);
 
-int	draw_minimap(t_map *map)
+int	draw_minimap(t_map *map, t_cub3d *cub)
 {
 	mlx_t		*mlx;
 	mlx_image_t	*map_img;
@@ -47,6 +47,7 @@ int	draw_minimap(t_map *map)
 	mlx_image_to_window(mlx, plr_img, plr_pos.x * minimap.square, plr_pos.y * minimap.square);
 	plr_pos.x = plr_pos.x * BLOCK_SIZE + BLOCK_SIZE / 2; // TODO: replace with internal block size, which is 64 pixels if I remember correctly
 	plr_pos.y += plr_pos.y * BLOCK_SIZE + BLOCK_SIZE / 2;
+	mlx_key_hook(mlx, &keyhook, cub);
 	mlx_loop(mlx);
 	mlx_terminate(mlx);
 	return (0);
@@ -59,8 +60,12 @@ void	keyhook(mlx_key_data_t keydata, void *param)
 	if (keydata.key == MLX_KEY_S && keydata.action == MLX_PRESS)
 		move((t_cub3d *)param, BACKWARD);
 	if (keydata.key == MLX_KEY_A && keydata.action == MLX_PRESS)
-		rotate((t_cub3d *)param, COUNTER_CLOCKWISE);
+		move((t_cub3d *)param, LEFT);
 	if (keydata.key == MLX_KEY_D && keydata.action == MLX_PRESS)
+		move((t_cub3d *)param, RIGHT);
+	if (keydata.key == MLX_KEY_LEFT && keydata.action == MLX_PRESS)
+		rotate((t_cub3d *)param, COUNTER_CLOCKWISE);
+	if (keydata.key == MLX_KEY_RIGHT && keydata.action == MLX_PRESS)
 		rotate((t_cub3d *)param, CLOCKWISE);
 }
 
@@ -69,28 +74,49 @@ void	move(t_cub3d *cub, t_movedata dir)
 	t_cor_px	new;
 
 	new = new_pos(cub, dir);
-	if (is_in_map(cor_px_to_bl((t_cor_px) {new.x, cub->player_px.y}), cub->map.map)
-		&& is_in_map(cor_px_to_bl((t_cor_px) {new.y, cub->player_px.x}), cub->map.map))
+	if (is_wall(cor_px_to_bl((t_cor_px) {new.x, cub->player_px.y}), cub->map.map)
+		|| is_wall(cor_px_to_bl((t_cor_px) {new.y, cub->player_px.x}), cub->map.map)
+		|| is_wall(cor_px_to_bl(new), cub->map.map))
 	{
 		cub->player_px.x = new.x;
 		cub->player_px.y = new.y;
-		update(cub);
+		update(cub); //redraw 
 	}
 }
 
 t_cor_px	new_pos(t_cub3d *cub, t_movedata dir)
 {
-	uint32_t	x;
-	uint32_t	y;
+	t_cor_px	new;
+	t_deg		alpha;
+	int			adjust_x;
+	int			adjust_y;
+	t_deg		dir_angle;
 
-	x = cos(cub->view.dir_angle) * MOVE_DISTANCE;
-	y = sin(cub->view.dir_angle) * MOVE_DISTANCE;
-	return (t_cor_px) {x, y};
+	dir_angle = cub->view.dir_angle;
+	if (dir == BACKWARD)
+		dir_angle = sum_angle(dir_angle, 180);
+	if (dir == LEFT)
+		dir_angle = sum_angle(dir_angle, 90);
+	if (dir == RIGHT)
+		dir_angle = sum_angle(dir_angle, 270);
+	alpha = (u_int16_t)(dir_angle) % 90 + (dir_angle - (uint16_t) dir_angle);
+	if (dir_angle > 270 || (dir_angle > 90 && dir_angle < 180))
+		alpha = 90 - alpha;
+	adjust_x = 1;
+	if (dir_angle > 90 && dir_angle < 270)
+		adjust_x = -1;
+	adjust_y = 1;
+	if (dir_angle < 180)
+		adjust_y = -1;
+	new.x = cub->player_px.x + (cos(deg_to_rad(alpha)) * MOVE_DISTANCE * adjust_x);
+	new.y = cub->player_px.y + (sin(deg_to_rad(alpha)) * MOVE_DISTANCE * adjust_y);
+	return (new);
 }
 
 void	rotate(t_cub3d *cub, t_movedata dir)
 {
-	cub->view.dir_angle += ROTATE_AMT * dir % 360;
+	cub->view.dir_angle = sum_angle(cub->view.dir_angle, ROTATE_AMT);
+	update(cub);
 }
 
 t_minimap_dims	get_bs_dims(t_map *map)
