@@ -90,6 +90,12 @@ typedef struct s_input
 	t_rgb	ceiling;
 }	t_input;
 
+typedef struct s_dvec
+{
+	double	x;
+	double	y;
+} t_dvec;
+
 typedef struct s_vec
 {
 	u_int32_t	x;
@@ -102,6 +108,7 @@ typedef t_vec t_cor_bl;
 // coordinates in pixel
 typedef t_vec t_cor_px;
 
+// data per ray
 typedef struct s_ray
 {
 	t_deg		angle;				// angle in deg
@@ -111,17 +118,38 @@ typedef struct s_ray
 	double		actual_distance;	// undistorted distance
 } t_ray;
 
+// data per vertical
+typedef struct s_wall_data
+{
+	u_int16_t	upper_end;			// upper y coordinate of the wall in pxl
+	u_int16_t	scld_height;		// scaled height of the wall in pxl
+	u_int16_t	txtre_x_pos;		// offset in texture
+	u_int16_t	distance;		// distance to wall
+	mlx_image_t	*img;				// wall image (E, N, W or S)
+} t_wall_data;
+
 typedef struct	s_view
 {
 	t_deg		dir_angle;		// current orientation of player (direction)
 	size_t		plane_distance; // distance between player and plane
 } t_view;
 
+typedef struct	s_walls
+{
+	mlx_image_t	*east;
+	mlx_image_t	*north;
+	mlx_image_t	*west;
+	mlx_image_t	*south;
+} t_walls;
+
 typedef struct s_cub3d
 {
 	mlx_t		*mlx;			// mlx window
-	mlx_image_t	*cur_img;
+	mlx_image_t	*cur_img;		// TODO: rename to frame maybe
 	mlx_image_t	*nxt_img;
+	t_walls		wall_imgs;		// wall textures
+	t_rgb		floor;
+	t_rgb		ceiling;
 	t_map		map;			// map data
 	t_view		view;			// viewing field
 	t_cor_px	player_px;		// player position in pixel
@@ -230,20 +258,28 @@ void		find_distance_to_wall(t_ray	*ray, t_cor_px pov, t_deg view_angle, t_map *m
 // draw_view.c -------------------------------------------------------------- //
 t_error draw_view(t_cub3d *cub3d);
 
+// draw_vertical.c ---------------------------------------------------------- //
+void	draw_vertical(t_cub3d *cub3d, u_int16_t frame_x_pos, u_int16_t scaled_height, t_ray *ray);
+
 // conversions.c ------------------------------------------------------------ //
 double		rad_to_deg(t_rad radians);
 double		deg_to_rad(t_deg degrees);
 t_cor_bl	cor_px_to_bl(t_cor_px cor);
+t_cor_bl	dvec_to_cor_bl(t_dvec cor);
 
-
+// shader.c ----------------------------------------------------------------- //
+void	shader_pxl(t_rgb *pxl, u_int32_t distance);
 
 // utils.c ------------------------------------------------------------------ //
 bool		is_wall(t_cor_bl cor, t_map *map);
+char		get_map_char(t_cor_bl cor, t_map *map);
 t_deg		sum_angle(t_deg angle1, t_deg angle2);
 int			safe_atoi(const char *str, int	*result);
 bool		is_in_map(t_cor_bl cor, t_map *map);
 u_int32_t	mult_by_block_size(u_int32_t num);
 u_int32_t	div_by_block_size(u_int32_t num);
+u_int32_t	get_rgba(int r, int g, int b, int a);
+t_rgb		get_pxl_rgba(mlx_image_t *img, int y, int x);
 
 // cleanup.c ---------------------------------------------------------------- //
 void	free_input(t_input *input);
