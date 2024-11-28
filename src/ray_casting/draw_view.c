@@ -34,12 +34,8 @@ t_error draw_view(t_cub3d *cub3d)
 		ray.angle = sum_angle(ray.angle, - angle_increment);
 		i++;
 	}
-	if (mlx_image_to_window(cub3d->mlx, cub3d->nxt_img, 0, 0) == -1)
-	{
-		perror("mlx_image_to_window");
-		return (-1);
-	}
-	// cub3d->cur_img->enabled = false;
 	ft_swap_ptrs((void **) &cub3d->cur_img, (void **) &cub3d->nxt_img);
+	cub3d->cur_img->enabled = true;
+	cub3d->nxt_img->enabled = false;
 	return (0);
 }

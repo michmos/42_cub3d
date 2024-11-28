@@ -116,6 +116,16 @@ t_error	init_cub3d(t_cub3d *cub3d, t_input *input)
 		perror("mlx_new_image");
 		return (-1);
 	}
+	if (mlx_image_to_window(cub3d->mlx, cub3d->nxt_img, 0, 0) == -1)
+	{
+		perror("mlx_image_to_window");
+		return (-1);
+	}
+	if (mlx_image_to_window(cub3d->mlx, cub3d->cur_img, 0, 0) == -1)
+	{
+		perror("mlx_image_to_window");
+		return (-1);
+	}
 	// load the images from the paths defined in the config file
 	if (load_wall_imgs(cub3d->mlx, &cub3d->wall_imgs, input) == -1)
 	{
