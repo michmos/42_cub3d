@@ -29,7 +29,6 @@
 typedef char t_error;
 typedef double t_rad;
 typedef double t_deg;
-
 typedef enum e_fields
 {
 	VOID = ' ',
@@ -268,7 +267,8 @@ t_cor_bl	cor_px_to_bl(t_cor_px cor);
 t_cor_bl	dvec_to_cor_bl(t_dvec cor);
 
 // shader.c ----------------------------------------------------------------- //
-void	shader_pxl(t_rgb *pxl, u_int32_t distance);
+void	shader_pxl(t_rgb *pxl, u_int32_t shader_mltplr);
+u_int16_t	get_shader_multplr(u_int32_t distance);
 
 // utils.c ------------------------------------------------------------------ //
 bool		is_wall(t_cor_bl cor, t_map *map);

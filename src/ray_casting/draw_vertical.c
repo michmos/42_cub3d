@@ -28,6 +28,7 @@ static void	put_scaled_wall(mlx_image_t *nxt_frame, t_wall_data *wall_info, u_in
 	u_int16_t	wall_y;
 	u_int16_t	scld_txtre_y_start;
 	t_rgb		pxl_rgba;
+	u_int16_t	shader_mltplr;
 
 	scale_factor = (double) wall_info->scld_height / wall_info->img->height;
 	// start y coordinate of scaled texutre
@@ -37,13 +38,16 @@ static void	put_scaled_wall(mlx_image_t *nxt_frame, t_wall_data *wall_info, u_in
 		scld_txtre_y_start = (wall_info->scld_height - WINDOW_HEIGHT) / 2;
 	}
 
+	// get mltplr that determines shading factor
+	shader_mltplr = get_shader_multplr(wall_info->distance);
+
 	wall_y = 0;
 	while (wall_y < wall_info->scld_height && frame_y_pos < WINDOW_HEIGHT)
 	{
 		// map coordinates to pixel (scaling) and get its rgb value
 		pxl_rgba = get_pxl_rgba(wall_info->img, (scld_txtre_y_start + wall_y )/ scale_factor, wall_info->txtre_x_pos);
 
-		shader_pxl(&pxl_rgba, wall_info->distance);
+		shader_pxl(&pxl_rgba, shader_mltplr);
 		mlx_put_pixel(nxt_frame, frame_x_pos, frame_y_pos, pxl_rgba.rgb);
 		wall_y++;
 		frame_y_pos++;
