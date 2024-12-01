@@ -114,7 +114,7 @@ typedef struct s_ray
 	t_cor_px	intersec;			// coordinates of intersection with wall block
 	bool		vrtcl_intersec;		// type of intersec
 	double		ray_distance;		// distance to wall intersec
-	double		actual_distance;	// undistorted distance
+	uint32_t	actual_distance;	// undistorted distance
 } t_ray;
 
 // data per vertical

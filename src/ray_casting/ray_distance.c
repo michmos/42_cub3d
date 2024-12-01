@@ -14,9 +14,9 @@ const double	get_vec_len(t_vec start, t_vec end)
 	return (hypoth);
 }
 
-const double	get_actual_distance(t_ray *ray, t_deg view_angle)
+static u_int32_t	get_actual_distance(t_ray *ray, t_deg view_angle)
 {
-	double	actual_distance;
+	u_int32_t	actual_distance;
 	t_deg	beta;
 
 	beta = sum_angle(ray->angle, - view_angle);
@@ -39,6 +39,7 @@ void	find_distance_to_wall(t_ray	*ray, t_cor_px pov, t_deg view_angle, t_map *ma
 	{
 		hor_intersec_hit = get_hor_intersec_hit(pov, ray->angle, map);
 		hor_hit_distance = get_vec_len(pov, hor_intersec_hit);
+
 	}
 
 	// use DDA to find first wall at vertical intersections
@@ -46,7 +47,10 @@ void	find_distance_to_wall(t_ray	*ray, t_cor_px pov, t_deg view_angle, t_map *ma
 	{
 		ver_intersec_hit = get_ver_intersec_hit(pov, ray->angle, map);
 		ver_hit_distance = get_vec_len(pov, ver_intersec_hit);
+
 	}
+
+
 
 	if ((ver_hit_distance < hor_hit_distance && ver_hit_distance > 0) || hor_hit_distance == -1)
 	{
