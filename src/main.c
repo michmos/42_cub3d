@@ -6,7 +6,7 @@ void	my_loop_hook(void *arg)
 	t_cub3d	*cub3d;
 
 	cub3d = (t_cub3d *) arg;
-	draw_view(cub3d);
+	
 	cub3d->view.dir_angle = sum_angle(cub3d->view.dir_angle, 0.5);
 
 // 	get key data
@@ -38,11 +38,15 @@ int	main(int argc, char *argv[])
 	{
 		return (-1);
 	}
+	if (draw_minimap(&cub3d) != 0)
+	{
+		free_input(&input);
+		return (-1);
+	}
 	mlx_set_setting(MLX_STRETCH_IMAGE, true);
-	mlx_loop_hook(cub3d.mlx, my_loop_hook, &cub3d);
+	mlx_key_hook(cub3d.mlx, keyhook, &cub3d);
+	draw_view(&cub3d);
 	mlx_loop(cub3d.mlx);
-
 	free_input(&input);
 	return (0);
 }
-

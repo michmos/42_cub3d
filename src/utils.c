@@ -13,6 +13,8 @@ char	get_map_char(t_cor_bl cor, t_map *map)
 // returns true if wall found at cor
 bool	is_wall(t_cor_bl cor, t_map *map)
 {
+	// printf("received cor x %u y %u\n", cor.x, cor.y);
+	// printf("map height %zu map width %zu\n", map->height, map->width);
 	assert(cor.y < map->height);
 	assert(cor.x < map->width);
 	return (get_map_char(cor, map) == WALL);
