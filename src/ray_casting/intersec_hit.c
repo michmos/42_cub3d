@@ -10,11 +10,11 @@ static t_dvec	get_first_hor_intersec(t_deg ray_angle, t_cor_px pov, t_deg alpha)
 
 	// y coordinate
 	// get lower grid intersection
-	intersec.y = mult_by_block_size(div_by_block_size(pov.y)) - 1;
+	intersec.y = mult_by_block_size(div_by_block_size(pov.y)) - 0.5;
 	if (ray_angle > 180)
 	{
 		// ray downwards-oriented -> upper grid intersection
-		intersec.y += BLOCK_SIZE + 1;
+		intersec.y += BLOCK_SIZE + 0.5;
 	}
 	// x coordinate
 	if (ray_angle > 90 && ray_angle < 270)
@@ -77,17 +77,18 @@ t_cor_px	get_hor_intersec_hit(t_cor_px pov, t_deg ray_angle, t_map *map)
 
 static t_dvec	get_first_vert_intersec(t_deg ray_angle, t_cor_px pov, t_deg alpha)
 {
-	t_cor_px 	intersec;;
+	t_dvec 	intersec;;
 
-	intersec = pov;
+	intersec.x = pov.x;
+	intersec.y = pov.y;
 
 	// x coordinate
 	// get left grid intersection
-	intersec.x = mult_by_block_size(div_by_block_size(pov.x)) - 1;
+	intersec.x = mult_by_block_size(div_by_block_size(pov.x)) - 0.5;
 	if (ray_angle < 90 || ray_angle > 270)
 	{
 		// ray right-oriented -> right grid intersection
-		intersec.x += BLOCK_SIZE + 1;
+		intersec.x += BLOCK_SIZE + 0.5;
 	}
 
 	// y coordinate
@@ -101,7 +102,7 @@ static t_dvec	get_first_vert_intersec(t_deg ray_angle, t_cor_px pov, t_deg alpha
 		// ray downwards-oriented -> y decreases
 		intersec.y -= tan(deg_to_rad(alpha)) * abs((int32_t) (intersec.x - pov.x));
 	}
-	return ((t_dvec) { .x = intersec.x, .y = intersec.y });
+	return (intersec);
 }
 
 t_cor_px	get_ver_intersec_hit(t_cor_px pov, t_deg ray_angle, t_map *map)
