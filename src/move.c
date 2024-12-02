@@ -6,7 +6,7 @@
 /*   By: dode-boe <dode-boe@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/12/01 16:14:22 by dode-boe      #+#    #+#                 */
-/*   Updated: 2024/12/02 17:20:28 by dode-boe      ########   odam.nl         */
+/*   Updated: 2024/12/02 17:43:08 by dode-boe      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ void	keyhook(mlx_key_data_t keydata, void *param)
 	draw_view(cub); //redraw 
 }
 
-void	loophook(mlx_key_data_t keydata, void *param)
+void	loophook(void *param)
 {
 	t_cub3d 	*cub;
 	u_int8_t	moved;
@@ -62,13 +62,19 @@ void	loophook(mlx_key_data_t keydata, void *param)
 static u_int8_t	move(t_cub3d *cub, t_movedata dir)
 {
 	t_cor_px	new;
+	int8_t		x_adjust;
+	int8_t		y_adjust;
 
+	x_adjust = 1;
+	if (new.x < cub->player_px.x)
+		x_adjust = -1;
+	y_adjust = 1;
+	if (new.y < cub->player_px.y)
+		y_adjust = -1;
 	new = new_pos(cub, dir);
 	// printf("--------\n---------\nold x: %u\nold y: %u\n---\nnew x: %u\nnew y: %u\n", cub->player_px.x, cub->player_px.y, new.x, new.y);
-	if (!is_wall(cor_px_to_bl((t_cor_px) {new.x + HITBOX, cub->player_px.y}), &cub->map)
-		&& !is_wall(cor_px_to_bl((t_cor_px) {cub->player_px.x, new.y + HITBOX}), &cub->map)
-		&& !is_wall(cor_px_to_bl((t_cor_px) {new.x - HITBOX, cub->player_px.y}), &cub->map)
-		&& !is_wall(cor_px_to_bl((t_cor_px) {cub->player_px.x, new.y - HITBOX}), &cub->map)
+	if (!is_wall(cor_px_to_bl((t_cor_px) {new.x + HITBOX * x_adjust, cub->player_px.y}), &cub->map)
+		&& !is_wall(cor_px_to_bl((t_cor_px) {cub->player_px.x, new.y + HITBOX * y_adjust}), &cub->map)
 		&& !is_wall(cor_px_to_bl(new), &cub->map))
 	{
 		// printf("--------\n---------\nUpdating player position\nold x: %u\nold y: %u\n---\nnew x: %u\nnew y: %u\n", cub->player_px.x, cub->player_px.y, new.x, new.y);

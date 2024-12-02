@@ -25,7 +25,7 @@
 # define PLAYER_SIZE 32								// in pixel
 # define MOVE_DISTANCE 4
 # define ROTATE_AMT 2
-# define HITBOX 30
+# define HITBOX 4
 
 typedef char t_error;
 typedef double t_rad;
@@ -161,8 +161,8 @@ typedef enum e_screendimensions
 	SCREEN_HEIGHT = 2160,
 	IMAGE_WIDTH = SCREEN_WIDTH / 2,
 	IMAGE_HEIGHT = SCREEN_HEIGHT / 2,
-	MINIMAP_MAX_WIDTH = IMAGE_WIDTH / 2,
-	MINIMAP_MAX_HEIGHT = IMAGE_HEIGHT / 2
+	MINIMAP_MAX_WIDTH = IMAGE_WIDTH / 4,
+	MINIMAP_MAX_HEIGHT = IMAGE_HEIGHT / 4
 }	t_screendimensions;
 
 typedef struct s_minimap_dims
@@ -290,7 +290,8 @@ void	free_input(t_input *input);
 ////////////////////////////////////////////////////////////////////////////////
 
 void	keyhook(mlx_key_data_t keydata, void *param);
-void	loophook(mlx_key_data_t keydata, void *param);
+void	loophook(void *param);
+
 
 ////////////////////////////////////////////////////////////////////////////////
 // minimap																	  //
