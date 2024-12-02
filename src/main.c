@@ -44,9 +44,10 @@ int	main(int argc, char *argv[])
 		return (-1);
 	}
 	mlx_set_setting(MLX_STRETCH_IMAGE, true);
-	mlx_key_hook(cub3d.mlx, keyhook, &cub3d);
+	mlx_key_hook(cub3d.mlx, loophook, &cub3d);
 	draw_view(&cub3d);
 	mlx_loop(cub3d.mlx);
+	mlx_terminate(cub3d.mlx);
 	free_input(&input);
 	return (0);
 }

@@ -195,12 +195,13 @@ typedef enum e_player
 
 typedef enum e_movedata
 {
+	NO_MOVEMENT,
 	COUNTER_CLOCKWISE = 1,
 	CLOCKWISE = -1,
-	FORWARD,
-	BACKWARD,
-	LEFT,
-	RIGHT
+	FORWARD = 2,
+	BACKWARD = 3,
+	LEFT = 4,
+	RIGHT = 5
 }	t_movedata;
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -289,6 +290,7 @@ void	free_input(t_input *input);
 ////////////////////////////////////////////////////////////////////////////////
 
 void	keyhook(mlx_key_data_t keydata, void *param);
+void	loophook(mlx_key_data_t keydata, void *param);
 
 ////////////////////////////////////////////////////////////////////////////////
 // minimap																	  //

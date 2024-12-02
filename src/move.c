@@ -6,7 +6,7 @@
 /*   By: dode-boe <dode-boe@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/12/01 16:14:22 by dode-boe      #+#    #+#                 */
-/*   Updated: 2024/12/01 17:01:19 by dode-boe      ########   odam.nl         */
+/*   Updated: 2024/12/02 15:56:03 by dode-boe      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,14 +36,45 @@ void	keyhook(mlx_key_data_t keydata, void *param)
 	draw_view(cub); //redraw 
 }
 
+void	loophook(mlx_key_data_t keydata, void *param)
+{
+	t_cub3d *cub;
+	t_movedata	dir;
+
+	dir = NO_MOVEMENT;
+	cub = (t_cub3d *) param;
+	if (mlx_is_key_down(cub->mlx, MLX_KEY_W))
+		dir = FORWARD;
+	else if (mlx_is_key_down(cub->mlx, MLX_KEY_S))
+		dir = BACKWARD;
+	move(cub, dir);
+	dir = NO_MOVEMENT;
+	if (mlx_is_key_down(cub->mlx, MLX_KEY_A))
+		dir = LEFT;
+	else if (mlx_is_key_down(cub->mlx, MLX_KEY_D))
+		dir = RIGHT;
+	move(cub, dir);
+	dir = NO_MOVEMENT;
+	if (mlx_is_key_down(cub->mlx, MLX_KEY_LEFT))
+		dir = COUNTER_CLOCKWISE;
+	else if (mlx_is_key_down(cub->mlx, MLX_KEY_RIGHT))
+		dir = CLOCKWISE;
+	rotate(cub, dir);
+	draw_view(cub); //redraw 
+}
+
 static void	move(t_cub3d *cub, t_movedata dir)
 {
 	t_cor_px	new;
 
+	if (dir == NO_MOVEMENT)
+		return ;
 	new = new_pos(cub, dir);
 	// printf("--------\n---------\nold x: %u\nold y: %u\n---\nnew x: %u\nnew y: %u\n", cub->player_px.x, cub->player_px.y, new.x, new.y);
 	if (!is_wall(cor_px_to_bl((t_cor_px) {new.x + 5, cub->player_px.y}), &cub->map)
 		&& !is_wall(cor_px_to_bl((t_cor_px) {cub->player_px.x, new.y + 5}), &cub->map)
+		&& !is_wall(cor_px_to_bl((t_cor_px) {new.x - 5, cub->player_px.y}), &cub->map)
+		&& !is_wall(cor_px_to_bl((t_cor_px) {cub->player_px.x, new.y - 5}), &cub->map)
 		&& !is_wall(cor_px_to_bl(new), &cub->map))
 	{
 		// printf("--------\n---------\nUpdating player position\nold x: %u\nold y: %u\n---\nnew x: %u\nnew y: %u\n", cub->player_px.x, cub->player_px.y, new.x, new.y);
@@ -83,5 +114,7 @@ static t_cor_px	new_pos(t_cub3d *cub, t_movedata dir)
 
 static void	rotate(t_cub3d *cub, t_movedata dir)
 {
-	cub->view.dir_angle = sum_angle(cub->view.dir_angle, ROTATE_AMT);
+	if (dir == NO_MOVEMENT)
+		return ;
+	cub->view.dir_angle = sum_angle(cub->view.dir_angle, ROTATE_AMT * dir);
 }
