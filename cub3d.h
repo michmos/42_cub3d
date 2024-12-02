@@ -25,6 +25,7 @@
 # define PLAYER_SIZE 32								// in pixel
 # define MOVE_DISTANCE 4
 # define ROTATE_AMT 2
+# define HITBOX 30
 
 typedef char t_error;
 typedef double t_rad;
@@ -195,13 +196,12 @@ typedef enum e_player
 
 typedef enum e_movedata
 {
-	NO_MOVEMENT,
-	COUNTER_CLOCKWISE = 1,
-	CLOCKWISE = -1,
 	FORWARD = 2,
 	BACKWARD = 3,
 	LEFT = 4,
-	RIGHT = 5
+	RIGHT = 5,
+	COUNTER_CLOCKWISE = 1,
+	CLOCKWISE = -1
 }	t_movedata;
 
 ////////////////////////////////////////////////////////////////////////////////
