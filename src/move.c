@@ -47,14 +47,17 @@ void	loophook(void *param)
 		moved = move(cub, FORWARD);
 	else if (mlx_is_key_down(cub->mlx, MLX_KEY_S))
 		moved = move(cub, BACKWARD);
+
 	if (mlx_is_key_down(cub->mlx, MLX_KEY_A))
 		moved += move(cub, LEFT);
 	else if (mlx_is_key_down(cub->mlx, MLX_KEY_D))
 		moved += move(cub, RIGHT);
+
 	if (mlx_is_key_down(cub->mlx, MLX_KEY_LEFT))
 		moved += rotate(cub, COUNTER_CLOCKWISE);
 	else if (mlx_is_key_down(cub->mlx, MLX_KEY_RIGHT))
 		moved += rotate(cub, CLOCKWISE);
+
 	if (moved)
 		draw_view(cub); //redraw 
 }
@@ -62,22 +65,13 @@ void	loophook(void *param)
 static u_int8_t	move(t_cub3d *cub, t_movedata dir)
 {
 	t_cor_px	new;
-	int8_t		x_adjust;
-	int8_t		y_adjust;
 
-	x_adjust = 1;
-	if (new.x < cub->player_px.x)
-		x_adjust = -1;
-	y_adjust = 1;
-	if (new.y < cub->player_px.y)
-		y_adjust = -1;
 	new = new_pos(cub, dir);
-	// printf("--------\n---------\nold x: %u\nold y: %u\n---\nnew x: %u\nnew y: %u\n", cub->player_px.x, cub->player_px.y, new.x, new.y);
-	if (!is_wall(cor_px_to_bl((t_cor_px) {new.x + HITBOX * x_adjust, cub->player_px.y}), &cub->map)
-		&& !is_wall(cor_px_to_bl((t_cor_px) {cub->player_px.x, new.y + HITBOX * y_adjust}), &cub->map)
-		&& !is_wall(cor_px_to_bl(new), &cub->map))
+	if (!is_wall(cor_px_to_bl((t_cor_px) {new.x + HITBOX, new.y}), &cub->map)
+		&& !is_wall(cor_px_to_bl((t_cor_px) {new.x, new.y + HITBOX}), &cub->map)
+		&& !is_wall(cor_px_to_bl((t_cor_px) {new.x - HITBOX, new.y}), &cub->map)
+		&& !is_wall(cor_px_to_bl((t_cor_px) {new.x, new.y - HITBOX}), &cub->map))
 	{
-		// printf("--------\n---------\nUpdating player position\nold x: %u\nold y: %u\n---\nnew x: %u\nnew y: %u\n", cub->player_px.x, cub->player_px.y, new.x, new.y);
 		cub->player_px.x = new.x;
 		cub->player_px.y = new.y;
 		return (true);
