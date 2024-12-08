@@ -2,6 +2,10 @@
 #ifndef CUB3D_H
 # define CUB3D_H
 
+# include "external_libs/42_libs/ft_libs.h"
+# include "external_libs/MLX42/include/MLX42/MLX42.h"
+# include "colors.h"
+
 # include <stddef.h>
 # include <sys/types.h>
 # include <unistd.h>
@@ -9,10 +13,8 @@
 # include <fcntl.h>
 # include <assert.h>
 # include <math.h>
-# include "external_libs/42_libs/ft_libs.h"
-# include "external_libs/MLX42/include/MLX42/MLX42.h"
-# include "colors.h"
 
+// Error messages
 # define USAGE_ERR "USAGE: ./cub3d <map>"
 # define BLOCK_SIZE_ERR "BLOCK_SIZE needs to be a power of two for performance reasons"
 
@@ -105,14 +107,11 @@ typedef struct s_vec
 // coordinates in blocks
 typedef t_vec t_cor_bl;
 
-// coordinates in pixel
-typedef t_vec t_cor_px;
-
 // data per ray
 typedef struct s_ray
 {
 	t_deg		angle;				// angle in deg
-	t_cor_px	intersec;			// coordinates of intersection with wall block
+	t_dvec	intersec;			// coordinates of intersection with wall block
 	bool		vrtcl_intersec;		// type of intersec
 	double		ray_distance;		// distance to wall intersec
 	uint32_t	actual_distance;	// undistorted distance
@@ -124,7 +123,7 @@ typedef struct s_wall_data
 	u_int16_t	upper_end;			// upper y coordinate of the wall in pxl
 	u_int16_t	scld_height;		// scaled height of the wall in pxl
 	u_int16_t	txtre_x_pos;		// offset in texture
-	u_int16_t	distance;		// distance to wall
+	u_int16_t	distance;			// distance to wall
 	mlx_image_t	*img;				// wall image (E, N, W or S)
 } t_wall_data;
 
@@ -145,17 +144,17 @@ typedef struct	s_walls
 typedef struct s_cub3d
 {
 	mlx_t		*mlx;			// mlx window
-	mlx_image_t	*cur_img;		// TODO: rename to frame maybe
-	mlx_image_t	*nxt_img;
+	mlx_image_t	*cur_frame;
+	mlx_image_t	*nxt_frame;
 	t_walls		wall_imgs;		// wall textures
-	t_rgb		floor;
-	t_rgb		ceiling;
+	t_rgb		floor;			// floor color
+	t_rgb		ceiling;		// ceiling color
 	t_map		map;			// map data
 	t_view		view;			// viewing field
-	t_cor_px	player_px;		// player position in pixel
+	t_dvec		player_pos;		// player position in pxl
 }	t_cub3d;
 
-typedef enum e_screendimensions
+typedef enum e_screen_dims
 {
 	SCREEN_WIDTH = 3840,
 	SCREEN_HEIGHT = 2160,
@@ -163,7 +162,7 @@ typedef enum e_screendimensions
 	IMAGE_HEIGHT = SCREEN_HEIGHT / 2,
 	MINIMAP_MAX_WIDTH = IMAGE_WIDTH / 4,
 	MINIMAP_MAX_HEIGHT = IMAGE_HEIGHT / 4
-}	t_screendimensions;
+}	t_screen_dims;
 
 typedef struct s_minimap_dims
 {
@@ -180,13 +179,13 @@ typedef struct s_minimap_help
 	mlx_t		*mlx;
 }		t_minimap_help;
 
-typedef enum e_minimapcolours
+typedef enum e_minimap_colours
 {
 	VOID_COLOUR = 0x010000,
 	SPACE_COLOUR = 0xF73E3E,
 	WALL_COLOUR = 0x3EF776,
 	PLAYER_COLOUR = 0xFFFFFF 
-}	t_minimapcolours;
+}	t_minimap_colours;
 
 typedef enum e_player
 {
@@ -249,11 +248,11 @@ int		safe_atoi(const char *str, int	*result);
 t_error		init_cub3d(t_cub3d *cub3d, t_input *input);
 
 // intersec_hit.c ----------------------------------------------------------- //
-t_cor_px	get_ver_intersec_hit(t_cor_px pov, t_deg ray_angle, t_map *map);
-t_cor_px	get_hor_intersec_hit(t_cor_px pov, t_deg ray_angle, t_map *map);
+t_dvec	get_ver_intersec_hit(t_dvec pov, t_deg ray_angle, t_map *map);
+t_dvec	get_hor_intersec_hit(t_dvec pov, t_deg ray_angle, t_map *map);
 
 // ray_distance.c ----------------------------------------------------------- //
-void		find_distance_to_wall(t_ray	*ray, t_cor_px pov, t_deg view_angle, t_map *map);
+void		find_distance_to_wall(t_ray	*ray, t_dvec pov, t_deg view_angle, t_map *map);
 
 // draw_view.c -------------------------------------------------------------- //
 t_error draw_view(t_cub3d *cub3d);
@@ -264,11 +263,10 @@ void	draw_vertical(t_cub3d *cub3d, u_int16_t frame_x_pos, u_int16_t scaled_heigh
 // conversions.c ------------------------------------------------------------ //
 double		rad_to_deg(t_rad radians);
 double		deg_to_rad(t_deg degrees);
-t_cor_bl	cor_px_to_bl(t_cor_px cor);
 t_cor_bl	dvec_to_cor_bl(t_dvec cor);
 
 // shader.c ----------------------------------------------------------------- //
-void	shader_pxl(t_rgb *pxl, u_int32_t shader_mltplr);
+void		shader_pxl(t_rgb *pxl, u_int32_t shader_mltplr);
 u_int16_t	get_shader_multplr(u_int32_t distance);
 
 // utils.c ------------------------------------------------------------------ //
@@ -289,8 +287,8 @@ void	free_input(t_input *input);
 // movement																	  //
 ////////////////////////////////////////////////////////////////////////////////
 
-void	keyhook(mlx_key_data_t keydata, void *param);
-void	loophook(void *param);
+u_int8_t	move(t_cub3d *cub, t_movedata dir);
+u_int8_t	rotate(t_cub3d *cub, t_movedata dir);
 
 
 ////////////////////////////////////////////////////////////////////////////////

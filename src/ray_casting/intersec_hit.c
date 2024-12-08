@@ -1,12 +1,11 @@
 
 #include "../../cub3d.h"
 
-static t_dvec	get_first_hor_intersec(t_deg ray_angle, t_cor_px pov, t_deg alpha)
+static t_dvec	get_first_hor_intersec(t_deg ray_angle, t_dvec pov, t_deg alpha)
 {
 	t_dvec 	intersec;;
 
-	intersec.y = pov.y;
-	intersec.x = pov.x;
+	intersec = pov;
 
 	// y coordinate
 	// get lower grid intersection
@@ -20,17 +19,17 @@ static t_dvec	get_first_hor_intersec(t_deg ray_angle, t_cor_px pov, t_deg alpha)
 	if (ray_angle > 90 && ray_angle < 270)
 	{
 		// ray left-oriented -> x decreases
-		intersec.x -= tan(deg_to_rad(alpha)) * abs((int32_t) (intersec.y - pov.y));
+		intersec.x -= tan(deg_to_rad(alpha)) * fabs(intersec.y - pov.y);
 	}
 	else
 	{
 		// ray right-oriented -> x increases
-		intersec.x += tan(deg_to_rad(alpha)) * abs((int32_t) (intersec.y - pov.y));
+		intersec.x += tan(deg_to_rad(alpha)) * fabs(intersec.y - pov.y);
 	}
 	return (intersec);
 }
 
-t_cor_px	get_hor_intersec_hit(t_cor_px pov, t_deg ray_angle, t_map *map)
+t_dvec	get_hor_intersec_hit(t_dvec pov, t_deg ray_angle, t_map *map)
 {
 	t_dvec		nxt_intersec;
 	t_dvec		lst_intersec;
@@ -72,15 +71,14 @@ t_cor_px	get_hor_intersec_hit(t_cor_px pov, t_deg ray_angle, t_map *map)
 		nxt_intersec.x = lst_intersec.x + x_dstnce;
 		lst_intersec = nxt_intersec;
 	}
-	return ((t_cor_px) { .x = lst_intersec.x, .y = lst_intersec.y });
+	return (lst_intersec);
 }
 
-static t_dvec	get_first_vert_intersec(t_deg ray_angle, t_cor_px pov, t_deg alpha)
+static t_dvec	get_first_vert_intersec(t_deg ray_angle, t_dvec pov, t_deg alpha)
 {
 	t_dvec 	intersec;;
 
-	intersec.x = pov.x;
-	intersec.y = pov.y;
+	intersec = pov;
 
 	// x coordinate
 	// get left grid intersection
@@ -95,23 +93,23 @@ static t_dvec	get_first_vert_intersec(t_deg ray_angle, t_cor_px pov, t_deg alpha
 	if (ray_angle > 180)
 	{
 		// ray downwards-oriented -> y increases
-		intersec.y += tan(deg_to_rad(alpha)) * abs((int32_t) (intersec.x - pov.x));
+		intersec.y += tan(deg_to_rad(alpha)) * fabs(intersec.x - pov.x);
 	}
 	else
 	{
 		// ray downwards-oriented -> y decreases
-		intersec.y -= tan(deg_to_rad(alpha)) * abs((int32_t) (intersec.x - pov.x));
+		intersec.y -= tan(deg_to_rad(alpha)) * fabs(intersec.x - pov.x);
 	}
 	return (intersec);
 }
 
-t_cor_px	get_ver_intersec_hit(t_cor_px pov, t_deg ray_angle, t_map *map)
+t_dvec	get_ver_intersec_hit(t_dvec pov, t_deg ray_angle, t_map *map)
 {
 	t_dvec	nxt_intersec;
 	t_dvec	lst_intersec;
-	double		y_dstnce;
-	double		x_dstnce;
-	t_deg		alpha;
+	double	y_dstnce;
+	double	x_dstnce;
+	t_deg	alpha;
 
 	// calcualte x difference between intersection points
 	x_dstnce = BLOCK_SIZE;
@@ -147,5 +145,5 @@ t_cor_px	get_ver_intersec_hit(t_cor_px pov, t_deg ray_angle, t_map *map)
 		nxt_intersec.x = lst_intersec.x + x_dstnce;
 		lst_intersec = nxt_intersec;
 	}
-	return ((t_cor_px) { .x = lst_intersec.x, .y = lst_intersec.y });
+	return (lst_intersec);
 }
