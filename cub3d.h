@@ -5,6 +5,7 @@
 # include "external_libs/42_libs/ft_libs.h"
 # include "external_libs/MLX42/include/MLX42/MLX42.h"
 # include "colors.h"
+# include "settings.h"
 
 # include <stddef.h>
 # include <sys/types.h>
@@ -18,16 +19,9 @@
 # define USAGE_ERR "USAGE: ./cub3d <map>"
 # define BLOCK_SIZE_ERR "BLOCK_SIZE needs to be a power of two for performance reasons"
 
-# define WINDOW_WIDTH 1024
-# define WINDOW_HEIGHT 512
+
 # define READ_BUF_SIZE 100							// size of chunk of bytes to read config file
-# define FOV 60										// Field of view in degrees
-# define BLOCK_SIZE 64								// in pixel
 # define LOG2_BLOCKS_SIZE ((int) log2(BLOCK_SIZE))	// used for bit shifting when div or mult
-# define PLAYER_SIZE 32								// in pixel
-# define MOVE_DISTANCE 4
-# define ROTATE_AMT 2
-# define HITBOX 4
 
 typedef char t_error;
 typedef double t_rad;
@@ -240,6 +234,7 @@ size_t	get_line_len(const char *str);
 int		safe_atoi(const char *str, int	*result);
 
 
+
 ////////////////////////////////////////////////////////////////////////////////
 // ray_casting																  //
 ////////////////////////////////////////////////////////////////////////////////
@@ -279,6 +274,9 @@ u_int32_t	mult_by_block_size(u_int32_t num);
 u_int32_t	div_by_block_size(u_int32_t num);
 u_int32_t	get_rgba(int r, int g, int b, int a);
 t_rgb		get_pxl_rgba(mlx_image_t *img, int y, int x);
+
+// check_settings.c --------------------------------------------------------- //
+t_error	check_settings(void);
 
 // cleanup.c ---------------------------------------------------------------- //
 void	free_input(t_input *input);

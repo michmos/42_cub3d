@@ -29,7 +29,6 @@ int	main(int argc, char *argv[])
 
 	if (argc != 2)
 	{
-		put_err(USAGE);
 		return (1);
 	}
 	ft_bzero(&input, sizeof(t_input));
@@ -42,8 +41,3 @@ int	main(int argc, char *argv[])
 	return (0);
 }
 
-
-1 1 1 1
-1 0 1 1
-1 1 E 1
-1 1 1 1

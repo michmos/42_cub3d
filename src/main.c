@@ -37,9 +37,8 @@ int	main(int argc, char *argv[])
 		put_err(USAGE_ERR);
 		return (-1);
 	}
-	if (BLOCK_SIZE % 2 != 0)
+	if (check_settings() == -1)
 	{
-		put_err(BLOCK_SIZE_ERR);
 		return (-1);
 	}
 	ft_bzero(&input, sizeof(t_input));
@@ -49,6 +48,7 @@ int	main(int argc, char *argv[])
 	}
 	if (init_cub3d(&cub3d, &input) == -1)
 	{
+		free_input(&input);
 		return (-1);
 	}
 	if (draw_minimap(&cub3d) != 0)
