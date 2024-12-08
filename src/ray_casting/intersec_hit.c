@@ -9,11 +9,11 @@ static t_dvec	get_first_hor_intersec(t_deg ray_angle, t_dvec pov, t_deg alpha)
 
 	// y coordinate
 	// get lower grid intersection
-	intersec.y = mult_by_block_size(div_by_block_size(pov.y)) - 0.5;
+	intersec.y = mult_by_block_size(div_by_block_size(pov.y)) - 0.01;
 	if (ray_angle > 180)
 	{
 		// ray downwards-oriented -> upper grid intersection
-		intersec.y += BLOCK_SIZE + 0.5;
+		intersec.y += BLOCK_SIZE + 0.01;
 	}
 	// x coordinate
 	if (ray_angle > 90 && ray_angle < 270)
@@ -82,11 +82,11 @@ static t_dvec	get_first_vert_intersec(t_deg ray_angle, t_dvec pov, t_deg alpha)
 
 	// x coordinate
 	// get left grid intersection
-	intersec.x = mult_by_block_size(div_by_block_size(pov.x)) - 0.5;
+	intersec.x = mult_by_block_size(div_by_block_size(pov.x)) - 0.01;
 	if (ray_angle < 90 || ray_angle > 270)
 	{
 		// ray right-oriented -> right grid intersection
-		intersec.x += BLOCK_SIZE + 0.5;
+		intersec.x += BLOCK_SIZE + 0.01;
 	}
 
 	// y coordinate
