@@ -31,8 +31,7 @@ static t_dvec	get_first_hor_intersec(t_deg ray_angle, t_dvec pov, t_deg alpha)
 
 t_dvec	get_hor_intersec_hit(t_dvec pov, t_deg ray_angle, t_map *map)
 {
-	t_dvec		nxt_intersec;
-	t_dvec		lst_intersec;
+	t_dvec		intersec;
 	double		x_dstnce;
 	double		y_dstnce;
 	t_deg		alpha;
@@ -63,15 +62,14 @@ t_dvec	get_hor_intersec_hit(t_dvec pov, t_deg ray_angle, t_map *map)
 	}
 
 	// find hit
-	lst_intersec = get_first_hor_intersec(ray_angle, pov, alpha);
-	while (is_in_map(dvec_to_cor_bl(lst_intersec), map)
-		&& !is_wall(dvec_to_cor_bl(lst_intersec), map))
+	intersec = get_first_hor_intersec(ray_angle, pov, alpha);
+	while (is_in_map(dvec_to_cor_bl(intersec), map)
+		&& !is_wall(dvec_to_cor_bl(intersec), map))
 	{
-		nxt_intersec.y = lst_intersec.y + y_dstnce;
-		nxt_intersec.x = lst_intersec.x + x_dstnce;
-		lst_intersec = nxt_intersec;
+		intersec.y += y_dstnce;
+		intersec.x += x_dstnce;
 	}
-	return (lst_intersec);
+	return (intersec);
 }
 
 static t_dvec	get_first_vert_intersec(t_deg ray_angle, t_dvec pov, t_deg alpha)
@@ -105,8 +103,7 @@ static t_dvec	get_first_vert_intersec(t_deg ray_angle, t_dvec pov, t_deg alpha)
 
 t_dvec	get_ver_intersec_hit(t_dvec pov, t_deg ray_angle, t_map *map)
 {
-	t_dvec	nxt_intersec;
-	t_dvec	lst_intersec;
+	t_dvec	intersec;
 	double	y_dstnce;
 	double	x_dstnce;
 	t_deg	alpha;
@@ -137,13 +134,12 @@ t_dvec	get_ver_intersec_hit(t_dvec pov, t_deg ray_angle, t_map *map)
 	}
 
 	// find hit
-	lst_intersec = get_first_vert_intersec(ray_angle, pov, alpha);
-	while (is_in_map(dvec_to_cor_bl(lst_intersec), map)
-		&& !is_wall(dvec_to_cor_bl(lst_intersec), map))
+	intersec = get_first_vert_intersec(ray_angle, pov, alpha);
+	while (is_in_map(dvec_to_cor_bl(intersec), map)
+		&& !is_wall(dvec_to_cor_bl(intersec), map))
 	{
-		nxt_intersec.y = lst_intersec.y + y_dstnce;
-		nxt_intersec.x = lst_intersec.x + x_dstnce;
-		lst_intersec = nxt_intersec;
+		intersec.y += y_dstnce;
+		intersec.x += x_dstnce;
 	}
-	return (lst_intersec);
+	return (intersec);
 }

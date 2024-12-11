@@ -24,7 +24,7 @@ void	loophook(void *param)
 		moved += rotate(cub, CLOCKWISE);
 
 	if (moved)
-		draw_view(cub); //redraw 
+		draw_view(cub);
 }
 
 int	main(int argc, char *argv[])

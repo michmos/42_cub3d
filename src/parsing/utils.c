@@ -7,7 +7,7 @@ static bool	did_overflow(int sign, int prev_num, int num)
 }
 
 // atoi with error detection.
-// returns 0 on success. 
+// returns 0 on success.
 // returns -1 in case of overflow or uncexpected char.
 int	safe_atoi(const char *str, int	*result)
 {
@@ -42,6 +42,7 @@ int	safe_atoi(const char *str, int	*result)
 	return (0);
 }
 
+// get len until new line character
 size_t	get_line_len(const char *str)
 {
 	char	*nwln_ptr;
@@ -57,6 +58,8 @@ size_t	get_line_len(const char *str)
 	}
 }
 
+// append char at the end of string.
+// no reallocation - assuming enough space
 void	append_char(char *str, char c, size_t n)
 {
 	size_t	len;
@@ -67,21 +70,24 @@ void	append_char(char *str, char c, size_t n)
 	i = 0;
 	while (i < n)
 	{
-		str[len + i] = VOID;
+		str[len + i] = c;
 		i++;
 	}
 }
 
+// return current character
 char	cur_char(t_in_stream *stream)
 {
 	return (stream->buffer[stream->idx]);
 }
 
+// return address of current character
 char	*cur_ptr(t_in_stream *stream)
 {
 	return (&stream->buffer[stream->idx]);
 }
 
+// skip whitespaces
 void	skip_whitespaces(t_in_stream *stream)
 {
 	while (cur_char(stream) && ft_is_whitespace(cur_char(stream)))
@@ -94,6 +100,7 @@ void	skip_whitespaces(t_in_stream *stream)
 	}
 }
 
+// skip chars
 void	skip_chars(const char *charset, t_in_stream *stream)
 {
 	while (cur_char(stream) && ft_strchr(charset, cur_char(stream)))
@@ -106,6 +113,7 @@ void	skip_chars(const char *charset, t_in_stream *stream)
 	}
 }
 
+// skip one + or - and digits
 void	skip_num(t_in_stream *stream)
 {
 	if (cur_char(stream) == '-' || cur_char(stream) == '+')
@@ -118,6 +126,7 @@ void	skip_num(t_in_stream *stream)
 	}
 }
 
+// output line until new line character
 void	put_cur_line(int fd, t_in_stream *stream)
 {
 	size_t	len;
@@ -152,6 +161,8 @@ void	put_cur_line(int fd, t_in_stream *stream)
 	write(fd, "\n", 1);
 }
 
+
+// output word until new line character
 void	put_cur_word(int fd, const char *str)
 {
 	size_t	len;

@@ -28,8 +28,8 @@ void	find_distance_to_wall(t_ray	*ray, t_dvec pov, t_deg view_angle, t_map *map)
 {
 	t_dvec	hor_intersec_hit;
 	t_dvec	ver_intersec_hit;
-	double		hor_hit_distance;
-	double		ver_hit_distance;
+	double	hor_hit_distance;
+	double	ver_hit_distance;
 
 	hor_hit_distance = -1;
 	ver_hit_distance = -1;
@@ -39,18 +39,13 @@ void	find_distance_to_wall(t_ray	*ray, t_dvec pov, t_deg view_angle, t_map *map)
 	{
 		hor_intersec_hit = get_hor_intersec_hit(pov, ray->angle, map);
 		hor_hit_distance = get_vec_len(pov, hor_intersec_hit);
-
 	}
-
 	// use DDA to find first wall at vertical intersections
 	if (ray->angle != 90 && ray->angle != 270)
 	{
 		ver_intersec_hit = get_ver_intersec_hit(pov, ray->angle, map);
 		ver_hit_distance = get_vec_len(pov, ver_intersec_hit);
-
 	}
-
-
 
 	if ((ver_hit_distance < hor_hit_distance && ver_hit_distance > 0) || hor_hit_distance == -1)
 	{
@@ -64,9 +59,7 @@ void	find_distance_to_wall(t_ray	*ray, t_dvec pov, t_deg view_angle, t_map *map)
 		ray->vrtcl_intersec = false;
 		ray->ray_distance = hor_hit_distance;
 	}
-
 	// correct ray distance for distortion (fish eye view)
-	// TODO: try once how it looks without this function
 	ray->actual_distance = get_actual_distance(ray, view_angle);
 }
 

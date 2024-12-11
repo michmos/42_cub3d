@@ -21,5 +21,3 @@ t_error	parse_txtre_path(t_in_stream *stream, char **txtre_path)
 	return (0);
 }
 
-// TODO: co
-

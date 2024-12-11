@@ -4,12 +4,10 @@
 
 static t_error	parse_content(t_input *input, t_in_stream *file_content)
 {
-	size_t	i;
-	int		error;
-	int		input_flags;
+	int	error;
+	int	input_flags;
 
 	input_flags = 0;
-	i = 0;
 	error = 0;
 	while (cur_char(file_content) && !error)
 	{
@@ -51,11 +49,10 @@ static t_error	parse_content(t_input *input, t_in_stream *file_content)
 		}
 		else
 		{
-			put_parsing_err(&file_content[i], "Unexpected token");
+			put_parsing_err(file_content, "Unexpected token");
 			put_expected_tokens(input_flags);
 			error = -1;
 		}
-		// TODO: you might want to check for whitespace here in case inputs need to be separated by whitespaces
 	}
 	if (error)
 	{

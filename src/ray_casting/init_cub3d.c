@@ -4,8 +4,7 @@
 
 static	size_t	get_plane_distance(void)
 {
-	return (((double) WINDOW_WIDTH / 2) / tan(deg_to_rad((double) FOV / 2)));
-	// TODO: maybe acutally round this number to sth else for performance reasons
+	return (( WINDOW_WIDTH / 2.0) / tan(deg_to_rad( FOV / 2.0)));
 }
 
 static t_deg	get_dir_angle(t_fields init_dir)
@@ -136,9 +135,7 @@ t_error	init_cub3d(t_cub3d *cub3d, t_input *input)
 	}
 	cub3d->floor = input->floor;
 	cub3d->ceiling = input->ceiling;
-
 	cub3d->map = input->map;
-
 	// set player starting position
 	cub3d->player_pos = get_plr_pos(&cub3d->map);
 
