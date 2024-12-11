@@ -68,6 +68,7 @@ static t_error	load_img(mlx_t	*mlx, mlx_image_t **dst, const char *path)
 		return(-1);
 	}
 	*dst = mlx_texture_to_image(mlx, txtre);
+	mlx_delete_texture(txtre);
 	if (!*dst)
 	{
 		perror("mlx_texture_to_image");
