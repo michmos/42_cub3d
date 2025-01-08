@@ -8,6 +8,7 @@ static u_int32_t	get_scaled_height(double wall_distance, size_t plane_distance)
 {
 	static double	multiplier;
 
+	// compute once the multiplier
 	if (multiplier == 0)
 	{
 		multiplier = (double) BLOCK_SIZE * plane_distance;
@@ -28,14 +29,14 @@ t_error draw_view(t_cub3d *cub3d)
 	i = 0;
 	while (i < WINDOW_WIDTH)
 	{
-		find_distance_to_wall(&ray, cub3d->player_px, cub3d->view.dir_angle, &cub3d->map);
+		find_distance_to_wall(&ray, cub3d->player_pos, cub3d->view.dir_angle, &cub3d->map);
 		scaled_height = get_scaled_height(ray.actual_distance, cub3d->view.plane_distance);
 		draw_vertical(cub3d, i, scaled_height, &ray);
 		ray.angle = sum_angle(ray.angle, - angle_increment);
 		i++;
 	}
-	ft_swap_ptrs((void **) &cub3d->cur_img, (void **) &cub3d->nxt_img);
-	cub3d->cur_img->enabled = true;
-	cub3d->nxt_img->enabled = false;
+	ft_swap_ptrs((void **) &cub3d->cur_frame, (void **) &cub3d->nxt_frame);
+	cub3d->cur_frame->enabled = true;
+	cub3d->nxt_frame->enabled = false;
 	return (0);
 }

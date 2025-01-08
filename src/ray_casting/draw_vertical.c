@@ -86,10 +86,10 @@ static t_wall_data	get_wall_data(t_walls *wall_imgs, t_ray *ray, u_int16_t scale
 	wall_data.img = get_wall_img(wall_imgs, ray);
 
 	// get offset inside block to map to texture slice
-	wall_data.txtre_x_pos = ray->intersec.x % BLOCK_SIZE;
+	wall_data.txtre_x_pos = (u_int16_t) ray->intersec.x % BLOCK_SIZE;
 	if (ray->vrtcl_intersec)
 	{
-		wall_data.txtre_x_pos = ray->intersec.y % BLOCK_SIZE;
+		wall_data.txtre_x_pos = (u_int16_t) ray->intersec.y % BLOCK_SIZE;
 	}
 
 	// get upper end of the wall
@@ -113,7 +113,7 @@ void	draw_vertical(t_cub3d *cub3d, u_int16_t frame_x_pos, u_int16_t scaled_heigh
 	wall_data = get_wall_data(&cub3d->wall_imgs, ray, scaled_height, center);
 
 	// draw
-	put_ceiling(cub3d->nxt_img, wall_data.upper_end, frame_x_pos, cub3d->ceiling.rgb);
-	put_scaled_wall(cub3d->nxt_img, &wall_data, frame_x_pos, wall_data.upper_end);
-	put_floor(cub3d->nxt_img, wall_data.upper_end + scaled_height, frame_x_pos, cub3d->floor.rgb);
+	put_ceiling(cub3d->nxt_frame, wall_data.upper_end, frame_x_pos, cub3d->ceiling.rgb);
+	put_scaled_wall(cub3d->nxt_frame, &wall_data, frame_x_pos, wall_data.upper_end);
+	put_floor(cub3d->nxt_frame, wall_data.upper_end + scaled_height, frame_x_pos, cub3d->floor.rgb);
 }

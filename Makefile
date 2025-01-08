@@ -1,5 +1,5 @@
 
-NAME	:= cub3d
+NAME			:= cub3d
 PARSING_TEST	:= test_parsing
 
 42_LIBS		:= external_libs/42_libs/libft.a

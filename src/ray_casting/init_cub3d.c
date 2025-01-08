@@ -4,8 +4,7 @@
 
 static	size_t	get_plane_distance(void)
 {
-	return (((double) WINDOW_WIDTH / 2) / tan(deg_to_rad((double) FOV / 2)));
-	// TODO: maybe acutally round this number to sth else for performance reasons
+	return (( WINDOW_WIDTH / 2.0) / tan(deg_to_rad( FOV / 2.0)));
 }
 
 static t_deg	get_dir_angle(t_fields init_dir)
@@ -43,16 +42,19 @@ static bool	is_player_pos(char c)
 	return ( c == PLAYER_EAST || c == PLAYER_NORTH || c == PLAYER_WEST || c == PLAYER_SOUTH);
 }
 
-static t_cor_bl	get_plr_pos(t_map *map)
+static t_dvec	get_plr_pos(t_map *map)
 {
 	size_t	i;
+	t_dvec	pos;
 
 	i = 0;
 	while (!is_player_pos(map->map[i]))
 	{
 		i++;
 	}
-	return ((t_vec) { .x = i % map->width, .y = i / map->width });
+	pos.x = (i % map->width) * BLOCK_SIZE + BLOCK_SIZE / 2.0;
+	pos.y = (u_int16_t)(i / map->width) * BLOCK_SIZE + BLOCK_SIZE / 2.0;
+	return (pos);
 }
 
 static t_error	load_img(mlx_t	*mlx, mlx_image_t **dst, const char *path)
@@ -66,6 +68,7 @@ static t_error	load_img(mlx_t	*mlx, mlx_image_t **dst, const char *path)
 		return(-1);
 	}
 	*dst = mlx_texture_to_image(mlx, txtre);
+	mlx_delete_texture(txtre);
 	if (!*dst)
 	{
 		perror("mlx_texture_to_image");
@@ -104,24 +107,24 @@ t_error	init_cub3d(t_cub3d *cub3d, t_input *input)
 		return (-1);
 	}
 	// create 2 frames that will be used alternating
-	cub3d->cur_img = mlx_new_image(cub3d->mlx, WINDOW_WIDTH, WINDOW_HEIGHT);
-	if (!cub3d->cur_img)
+	cub3d->cur_frame = mlx_new_image(cub3d->mlx, WINDOW_WIDTH, WINDOW_HEIGHT);
+	if (!cub3d->cur_frame)
 	{
 		perror("mlx_new_image");
 		return (-1);
 	}
-	cub3d->nxt_img = mlx_new_image(cub3d->mlx, WINDOW_WIDTH, WINDOW_HEIGHT);
-	if (!cub3d->nxt_img)
+	cub3d->nxt_frame = mlx_new_image(cub3d->mlx, WINDOW_WIDTH, WINDOW_HEIGHT);
+	if (!cub3d->nxt_frame)
 	{
 		perror("mlx_new_image");
 		return (-1);
 	}
-	if (mlx_image_to_window(cub3d->mlx, cub3d->nxt_img, 0, 0) == -1)
+	if (mlx_image_to_window(cub3d->mlx, cub3d->nxt_frame, 0, 0) == -1)
 	{
 		perror("mlx_image_to_window");
 		return (-1);
 	}
-	if (mlx_image_to_window(cub3d->mlx, cub3d->cur_img, 0, 0) == -1)
+	if (mlx_image_to_window(cub3d->mlx, cub3d->cur_frame, 0, 0) == -1)
 	{
 		perror("mlx_image_to_window");
 		return (-1);
@@ -133,14 +136,10 @@ t_error	init_cub3d(t_cub3d *cub3d, t_input *input)
 	}
 	cub3d->floor = input->floor;
 	cub3d->ceiling = input->ceiling;
-
 	cub3d->map = input->map;
-
 	// set player starting position
-	cub3d->player_px = get_plr_pos(&cub3d->map);
-	cub3d->player_px.x = cub3d->player_px.x * BLOCK_SIZE + BLOCK_SIZE / 2;
-	cub3d->player_px.y = cub3d->player_px.y * BLOCK_SIZE + BLOCK_SIZE / 2;
+	cub3d->player_pos = get_plr_pos(&cub3d->map);
 
-	set_view(&cub3d->view, get_map_char(cor_px_to_bl(cub3d->player_px), &cub3d->map));
+	set_view(&cub3d->view, get_map_char(dvec_to_cor_bl(cub3d->player_pos), &cub3d->map));
 	return (0);
 }

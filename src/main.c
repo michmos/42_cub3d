@@ -1,18 +1,31 @@
 
 #include "../cub3d.h"
 
-// void	my_loop_hook(void *arg)
-// {
-// 	t_cub3d	*cub3d;
+void	loophook(void *param)
+{
+	t_cub3d 	*cub;
+	u_int8_t	moved;
 
-// 	cub3d = (t_cub3d *) arg;
-	
-// 	cub3d->view.dir_angle = sum_angle(cub3d->view.dir_angle, 0.5);
+	moved = false;
+	cub = (t_cub3d *) param;
+	if (mlx_is_key_down(cub->mlx, MLX_KEY_W))
+		moved = move(cub, FORWARD);
+	else if (mlx_is_key_down(cub->mlx, MLX_KEY_S))
+		moved = move(cub, BACKWARD);
 
-// // 	get key data
-// // 	update view.angle and player_pos IF DATA CHANGED
-// //	redraw image based on new view and pos
-// }
+	if (mlx_is_key_down(cub->mlx, MLX_KEY_A))
+		moved += move(cub, LEFT);
+	else if (mlx_is_key_down(cub->mlx, MLX_KEY_D))
+		moved += move(cub, RIGHT);
+
+	if (mlx_is_key_down(cub->mlx, MLX_KEY_LEFT))
+		moved += rotate(cub, COUNTER_CLOCKWISE);
+	else if (mlx_is_key_down(cub->mlx, MLX_KEY_RIGHT))
+		moved += rotate(cub, CLOCKWISE);
+
+	if (moved)
+		draw_view(cub);
+}
 
 int	main(int argc, char *argv[])
 {
@@ -24,9 +37,8 @@ int	main(int argc, char *argv[])
 		put_err(USAGE_ERR);
 		return (-1);
 	}
-	if (BLOCK_SIZE % 2 != 0)
+	if (check_settings() == -1)
 	{
-		put_err(BLOCK_SIZE_ERR);
 		return (-1);
 	}
 	ft_bzero(&input, sizeof(t_input));
@@ -36,6 +48,7 @@ int	main(int argc, char *argv[])
 	}
 	if (init_cub3d(&cub3d, &input) == -1)
 	{
+		free_input(&input);
 		return (-1);
 	}
 	if (draw_minimap(&cub3d) != 0)
