@@ -160,3 +160,18 @@ void	put_cur_word(int fd, const char *str)
 	write(fd, str, len);
 	write(fd, "\n", 1);
 }
+
+void	replace_spaces(char *str)
+{
+	int	i;
+
+	i = 0;
+	while (str[i])
+	{
+		if (str[i] == ' ')
+		{
+			str[i] = '1';
+		}
+		i++;
+	}
+}
