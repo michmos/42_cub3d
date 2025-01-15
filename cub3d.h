@@ -218,10 +218,10 @@ t_error	parse_file(t_input *input, const char *map_path);
 
 // parse_map.c -------------------------------------------------------------- //
 t_error	parse_map(t_in_stream *stream, t_map *map);
-int		trace_map(t_map *map);
-int		trace_line(t_map *map, size_t y, size_t x);
 bool	is_valid_map_char(char c);
-int		borders_void(t_map *map, size_t y, size_t x);
+
+// check.c ------------------------------------------------------------------ //
+int		trace_map(t_map *map);
 
 // parse_rgb.c -------------------------------------------------------------- //
 t_error	parse_rgb(t_in_stream *stream, t_rgb *rgb);
@@ -245,7 +245,6 @@ void	append_char(char *str, char c, size_t n);
 size_t	get_line_len(const char *str);
 int		safe_atoi(const char *str, int	*result);
 void	replace_spaces(char *str);
-
 
 ////////////////////////////////////////////////////////////////////////////////
 // ray_casting																  //
