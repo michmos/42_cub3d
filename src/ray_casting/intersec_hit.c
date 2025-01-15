@@ -124,7 +124,7 @@ t_dvec	get_ver_intersec_hit(t_dvec pov, t_deg ray_angle, t_map *map)
 
 	// calcualte y difference between intersection points
 	y_dstnce = 0;
-	if (ray_angle != 0 && ray_angle != 180) // TODO: low priority, test what happens if this if condition is removed and ray_angle is 0 or 180
+	if (ray_angle != 0 && ray_angle != 180)
 	{
 		y_dstnce = BLOCK_SIZE * tan(deg_to_rad(alpha));
 		if (ray_angle < 180)

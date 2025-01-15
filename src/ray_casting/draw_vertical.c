@@ -1,6 +1,5 @@
 
 #include "../../cub3d.h"
-#include <sys/types.h>
 
 static mlx_image_t	*get_wall_img(t_walls *wall_imgs, t_ray *ray)
 {
