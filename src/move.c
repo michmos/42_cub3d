@@ -6,12 +6,13 @@
 /*   By: dode-boe <dode-boe@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/12/01 16:14:22 by dode-boe      #+#    #+#                 */
-/*   Updated: 2025/01/15 20:36:15 by dode-boe      ########   odam.nl         */
+/*   Updated: 2025/01/15 21:01:09 by dode-boe      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../cub3d.h"
 
+static void		move_minimap(t_dvec new, t_cub3d *cub);
 static t_dvec	new_pos(t_cub3d *cub, t_movedata dir);
 
 u_int8_t	move(t_cub3d *cub, t_movedata dir)
@@ -85,14 +86,14 @@ u_int8_t	rotate(t_cub3d *cub, t_movedata dir)
 	return (true);
 }
 
-void	move_minimap(t_dvec new, t_cub3d *cub)
+static void	move_minimap(t_dvec new, t_cub3d *cub)
 {
 	double	d_x;
 	double	d_y;
 	
 
-	d_x = (new.x - cub->player_pos.x) * (fmod((double)cub->mini.minimap_square, (double)BLOCK_SIZE) + cub->mini.offset_x);
-	d_y = (new.y - cub->player_pos.y) * (fmod((double)cub->mini.minimap_square, (double)BLOCK_SIZE) + cub->mini.offset_y);
+	d_x = (new.x - cub->player_pos.x) * cub->mini.ratio + cub->mini.offset_x;
+	d_y = (new.y - cub->player_pos.y) * cub->mini.ratio + cub->mini.offset_y;
 	cub->mini.offset_x = d_x - (int)d_x;
 	cub->mini.offset_y = d_y - (int)d_y;
 	cub->mini.player->instances[0].x += (int)d_x;

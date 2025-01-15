@@ -135,6 +135,14 @@ typedef struct	s_walls
 	mlx_image_t	*south;
 } t_walls;
 
+typedef struct s_cub_mmap
+{
+	double		ratio;
+	double		offset_y;
+	double		offset_x;
+	mlx_image_t	*player;
+}		t_cub_mmap;
+
 typedef struct s_cub3d
 {
 	mlx_t		*mlx;			// mlx window
@@ -173,14 +181,6 @@ typedef struct s_minimap_help
 	mlx_image_t	*img;
 	mlx_t		*mlx;
 }		t_minimap_help;
-
-typedef struct s_cub_mmap
-{
-	int32_t		minimap_square;
-	double		offset_y;
-	double		offset_x;
-	mlx_image_t	*player;
-}		t_cub_mmap;
 
 typedef enum e_minimap_colours
 {
