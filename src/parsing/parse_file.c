@@ -2,6 +2,62 @@
 #include "../../cub3d.h"
 #include <unistd.h>
 
+static t_error	parse_txtrs(t_in_stream *file_content, t_input *input, int *input_flags)
+{
+	t_error	error;
+	
+	error = 0;
+	if (ft_strncmp(cur_ptr(file_content), "NO ", 3) == 0 && !(*input_flags & NO))
+	{
+		error = parse_txtre_path(file_content, &input->north_txtre);
+		*input_flags |= NO;
+	}
+	else if (ft_strncmp(cur_ptr(file_content), "SO ", 3) == 0 && !(*input_flags & SO))
+	{
+		error = parse_txtre_path(file_content, &input->south_txtre);
+		*input_flags |= SO;
+	}
+	else if (ft_strncmp(cur_ptr(file_content), "WE ", 3) == 0 && !(*input_flags & WE))
+	{
+		error = parse_txtre_path(file_content, &input->west_txtre);
+		*input_flags |= WE;
+	}
+	else if (ft_strncmp(cur_ptr(file_content), "EA ", 3) == 0 && !(*input_flags & EA))
+	{
+		error = parse_txtre_path(file_content, &input->east_txtre);
+		*input_flags |= EA;
+	}
+	return (error);
+}
+
+static t_error	parse_rest(t_in_stream *file_content, t_input *input, int *input_flags)
+{
+	t_error	error;
+
+	if (ft_strncmp(cur_ptr(file_content), "F ", 2) == 0 && !(*input_flags & F))
+	{
+		error = parse_rgb(file_content, &input->floor);
+		*input_flags |= F;
+	}
+	else if (ft_strncmp(cur_ptr(file_content), "C ", 2) == 0 && !(*input_flags & C))
+	{
+		error = parse_rgb(file_content, &input->ceiling);
+		*input_flags |= C;
+	}
+	else if (is_valid_map_char(cur_char(file_content)) && *input_flags == (NO | SO | WE | EA | C | F))
+	{
+		error = parse_map(file_content, &input->map);
+		*input_flags |= M;
+	}
+	else
+	{
+		put_parsing_err(file_content, "Unexpected token");
+		put_expected_tokens(*input_flags);
+		error = -1;
+	}
+	return (error);
+}
+
 static t_error	parse_content(t_input *input, t_in_stream *file_content)
 {
 	int	error;
@@ -12,53 +68,20 @@ static t_error	parse_content(t_input *input, t_in_stream *file_content)
 	while (cur_char(file_content) && !error)
 	{
 		skip_whitespaces(file_content);
-		if (ft_strncmp(cur_ptr(file_content), "NO ", 3) == 0 && !(input_flags & NO))
-		{
-			error = parse_txtre_path(file_content, &input->north_txtre);
-			input_flags |= NO;
-		}
-		else if (ft_strncmp(cur_ptr(file_content), "SO ", 3) == 0 && !(input_flags & SO))
-		{
-			error = parse_txtre_path(file_content, &input->south_txtre);
-			input_flags |= SO;
-		}
-		else if (ft_strncmp(cur_ptr(file_content), "WE ", 3) == 0 && !(input_flags & WE))
-		{
-			error = parse_txtre_path(file_content, &input->west_txtre);
-			input_flags |= WE;
-		}
-		else if (ft_strncmp(cur_ptr(file_content), "EA ", 3) == 0 && !(input_flags & EA))
-		{
-			error = parse_txtre_path(file_content, &input->east_txtre);
-			input_flags |= EA;
-		}
-		else if (ft_strncmp(cur_ptr(file_content), "F ", 2) == 0 && !(input_flags & F))
-		{
-			error = parse_rgb(file_content, &input->floor);
-			input_flags |= F;
-		}
-		else if (ft_strncmp(cur_ptr(file_content), "C ", 2) == 0 && !(input_flags & C))
-		{
-			error = parse_rgb(file_content, &input->ceiling);
-			input_flags |= C;
-		}
-		else if (is_valid_map_char(cur_char(file_content)) && input_flags == ALL_FLAGS)
-		{
-			error = parse_map(file_content, &input->map);
-			break;
-		}
+		if ((ft_strncmp(cur_ptr(file_content), "NO ", 3) == 0 && !(input_flags & NO))
+	  		|| (ft_strncmp(cur_ptr(file_content), "SO ", 3) == 0 && !(input_flags & SO))
+	  		|| (ft_strncmp(cur_ptr(file_content), "WE ", 3) == 0 && !(input_flags & WE))
+			|| (ft_strncmp(cur_ptr(file_content), "EA ", 3) == 0 && !(input_flags & EA)))
+			error = parse_txtrs(file_content, input, &input_flags);
 		else
 		{
-			put_parsing_err(file_content, "Unexpected token");
-			put_expected_tokens(input_flags);
-			error = -1;
+			error = parse_rest(file_content, input, &input_flags);
+			if (input_flags == ALL_FLAGS)
+				break;
 		}
 	}
 	if (error)
-	{
-		free_input(input);
-		return (-1);
-	}
+		return (free_input(input), -1);
 	return (0);
 }
 

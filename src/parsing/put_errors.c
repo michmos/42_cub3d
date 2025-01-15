@@ -19,32 +19,20 @@ void	put_parsing_err(t_in_stream *stream, const char *msg)
 void	put_expected_tokens(int input_flags)
 {
 	put_err(RED "Expected one of the following: \n");
-	if (input_flags != ALL_FLAGS)
+	if (input_flags != (NO | SO | EA | WE | C | F))
 	{
 		if ((input_flags & NO) == 0)
-		{
 			put_err(" NO <path_to_texture>\n");
-		}
 		if ((input_flags & SO) == 0)
-		{
 			put_err(" SO <path_to_texture>\n");
-		}
 		if ((input_flags & WE) == 0)
-		{
 			put_err(" WE <path_to_texture>\n");
-		}
 		if ((input_flags & EA) == 0)
-		{
 			put_err(" EA <path_to_texture>\n");
-		}
 		if ((input_flags & C) == 0)
-		{
 			put_err(" C <r>, <g>, <b>\n");
-		}
 		if ((input_flags & F) == 0)
-		{
 			put_err(" F <r>, <g>, <b>\n");
-		}
 	}
 	else
 	{

@@ -1,6 +1,5 @@
 
 #include "../../cub3d.h"
-#include <math.h>
 
 const double	get_vec_len(t_dvec start, t_dvec end)
 {
@@ -28,25 +27,21 @@ void	find_distance_to_wall(t_ray	*ray, t_dvec pov, t_deg view_angle, t_map *map)
 {
 	t_ray	hor_hit;
 	t_ray	ver_hit;
-	static	bool	last_was_ver = false;
+	static bool	last_was_ver = false;
 	double	diff;
 
 	hor_hit.ray_distance = -1;
 	ver_hit.ray_distance = -1;
-
-	// use DDA to find first wall at horizontal intersections
 	if (ray->angle != 0 && ray->angle != 180)
 	{
 		hor_hit.intersec = get_hor_intersec_hit(pov, ray->angle, map);
 		hor_hit.ray_distance = get_vec_len(pov, hor_hit.intersec);
 	}
-	// use DDA to find first wall at vertical intersections
 	if (ray->angle != 90 && ray->angle != 270)
 	{
 		ver_hit.intersec = get_ver_intersec_hit(pov, ray->angle, map);
 		ver_hit.ray_distance = get_vec_len(pov, ver_hit.intersec);
 	}
-
 	diff = fabs(hor_hit.ray_distance - ver_hit.ray_distance);
 	if ((diff < 0.3 && last_was_ver)
 	|| ((ver_hit.ray_distance < hor_hit.ray_distance && ver_hit.ray_distance > 0) && diff > 0.3) || hor_hit.ray_distance == -1)
@@ -62,7 +57,5 @@ void	find_distance_to_wall(t_ray	*ray, t_dvec pov, t_deg view_angle, t_map *map)
 		ray->vrtcl_intersec = false;
 	}
 	last_was_ver = ray->vrtcl_intersec;
-
-	// correct ray distance for distortion (fish eye view)
 	ray->actual_distance = get_actual_distance(ray, view_angle);
 }

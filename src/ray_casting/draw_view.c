@@ -8,7 +8,6 @@ static u_int32_t	get_scaled_height(double wall_distance, size_t plane_distance)
 {
 	static double	multiplier;
 
-	// compute once the multiplier
 	if (multiplier == 0)
 	{
 		multiplier = (double) BLOCK_SIZE * plane_distance;
@@ -23,7 +22,6 @@ t_error draw_view(t_cub3d *cub3d)
 	u_int16_t	scaled_height;
 	size_t i;
 
-	// get angle of initial ray
 	ray.angle = sum_angle(cub3d->view.dir_angle, (double) FOV / 2);
 	angle_increment = (double) FOV / WINDOW_WIDTH;
 	i = 0;

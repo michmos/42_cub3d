@@ -37,10 +37,7 @@ char	*read_file(int	fd)
 
 	file_content = ft_strdup("");
 	if (!file_content)
-	{
-		handle_err(fd, NULL, "malloc");
-		return (NULL);
-	}
+		return(handle_err(fd, NULL, "malloc"), NULL);
 	bytes_read = READ_BUF_SIZE - 1;
 	while (bytes_read == READ_BUF_SIZE - 1)
 	{
@@ -56,10 +53,7 @@ char	*read_file(int	fd)
 		}
 	}
 	if (bytes_read == -1)
-	{
-		handle_err(fd, file_content, "read");
-		return (NULL);
-	}
+		return(handle_err(fd, file_content, "read"), NULL);
 	close(fd);
 	return (file_content);
 }

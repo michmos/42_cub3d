@@ -35,31 +35,17 @@ t_error	parse_rgb(t_in_stream *stream, t_rgb *rgb)
 	const char	*keyword_pos;
 
 	keyword_pos = cur_ptr(stream);
-	// skip keyword
 	stream->idx += 2;
 	skip_chars(" ", stream);
-	// parse r
 	if (parse_rgb_component(stream, &rgb->r) == -1)
-	{
 		return (-1);
-	}
 	if (skip_separators(stream) == -1)
-	{
 		return (-1);
-	}
-	// parse g
 	if (parse_rgb_component(stream, &rgb->g) == -1)
-	{
 		return (-1);
-	}
 	if (skip_separators(stream) == -1)
-	{
 		return (-1);
-	}
-	// parse b
 	if (parse_rgb_component(stream,&rgb->b) == -1)
-	{
 		return (-1);
-	}
 	return (0);
 }

@@ -1,11 +1,6 @@
 
 #include "../../cub3d.h"
 
-bool	is_valid_map_char(char c)
-{
-	return (c == VOID || c == SPACE || c == WALL || c == PLAYER_SOUTH || c == PLAYER_EAST || c == PLAYER_WEST || c == PLAYER_NORTH);
-}
-
 static size_t	get_max_width(const char *map_start, size_t height)
 {
 	size_t	cur_width;
@@ -52,12 +47,10 @@ static size_t	get_height(const char *map_str)
 	while (map_str[i] && line_blngs_to_map(&map_str[i]))
 	{
 		height++;
-		// skip line
 		while (map_str[i] && map_str[i] != '\n')
 		{
 			i++;
 		}
-		// skip new_line
 		if (map_str[i])
 		{
 			i++;
@@ -66,32 +59,30 @@ static size_t	get_height(const char *map_str)
 	return (height);
 }
 
-static int	rmng_syntax_is_crrct(t_in_stream *stream)
+static int	rmng_syntax_is_crrct(t_in_stream stream)
 {
 	bool 	inside_map;
 
 	inside_map = true;
-	while (cur_char(stream))
+	while (cur_char(&stream))
 	{
 		if (inside_map)
 		{
-			if (cur_char(stream) == '\n' && !line_blngs_to_map(cur_ptr(stream) + 1))
-			{
+			if (cur_char(&stream) == '\n' && !line_blngs_to_map(cur_ptr(&stream) + 1))
 				inside_map = false;
-			}
-			else if (!is_valid_map_char(cur_char(stream)) && cur_char(stream) != '\n')
+			else if (!is_valid_map_char(cur_char(&stream)) && cur_char(&stream) != '\n')
 			{
-				put_parsing_err(stream, "Invalid map char");
+				put_parsing_err(&stream, "Invalid map char");
 				return (false);
 			}
 		}
-		else if (!ft_is_whitespace(cur_char(stream)))
+		else if (!ft_is_whitespace(cur_char(&stream)))
 		{
-			put_parsing_err(stream, "Unexpected token");
+			put_parsing_err(&stream, "Unexpected token");
 			ft_printf_fd(STDERR_FILENO, RED "Expected: EOF" RESET_COLOR);
 			return (false);
 		}
-		stream->idx++;
+		stream.idx++;
 	}
 	return (true);
 }
@@ -101,23 +92,14 @@ t_error	parse_map(t_in_stream *stream, t_map *map)
 	size_t	width;
 	size_t	i;
 	char	*nl_ptr;
-	t_in_stream	stream_cpy;
 
-	stream_cpy = *stream;
-	if (!rmng_syntax_is_crrct(&stream_cpy))
-	{
+	if (!rmng_syntax_is_crrct(*stream))
 		return (-1);
-	}
-
 	map->height = get_height(cur_ptr(stream));
 	map->width = get_max_width(cur_ptr(stream), map->height);
 	map->map = ft_calloc((map->height * map->width) + 1, sizeof(char));
 	if (!map->map)
-	{
-		perror("malloc");
-		return (-1);
-	}
-	// fill map
+		return (perror("malloc"), -1);
 	i = 0;
 	while (i < map->height)
 	{
@@ -128,10 +110,7 @@ t_error	parse_map(t_in_stream *stream, t_map *map)
 		i++;
 	}
 	if (trace_map(map))
-	{
-		free(map->map);
-		return (-1);
-	}
+		return (free(map->map), -1);
 	replace_spaces(map->map);
 	return (0);
 }

@@ -46,7 +46,8 @@ typedef enum e_inputs
 	EA = 1 << 3,
 	C  = 1 << 4,
 	F  = 1 << 5,
-	ALL_FLAGS = NO | SO | WE | EA | C | F
+	M  = 1 << 6,
+	ALL_FLAGS = NO | SO | WE | EA | C | F | M
 } t_inputs;
 
 typedef union u_rgb
@@ -218,7 +219,6 @@ t_error	parse_file(t_input *input, const char *map_path);
 
 // parse_map.c -------------------------------------------------------------- //
 t_error	parse_map(t_in_stream *stream, t_map *map);
-bool	is_valid_map_char(char c);
 
 // check.c ------------------------------------------------------------------ //
 int		trace_map(t_map *map);
@@ -245,6 +245,7 @@ void	append_char(char *str, char c, size_t n);
 size_t	get_line_len(const char *str);
 int		safe_atoi(const char *str, int	*result);
 void	replace_spaces(char *str);
+bool	is_valid_map_char(char c);
 
 ////////////////////////////////////////////////////////////////////////////////
 // ray_casting																  //
@@ -252,6 +253,11 @@ void	replace_spaces(char *str);
 
 // init_cub3d.c ------------------------------------------------------------- //
 t_error		init_cub3d(t_cub3d *cub3d, t_input *input);
+
+// init_cub3d2.c ------------------------------------------------------------ //
+size_t	get_plane_distance(void);
+t_deg	get_dir_angle(t_fields init_dir);
+void	set_view(t_view *view, t_fields init_dir);
 
 // intersec_hit.c ----------------------------------------------------------- //
 t_dvec	get_ver_intersec_hit(t_dvec pov, t_deg ray_angle, t_map *map);
@@ -285,6 +291,7 @@ u_int32_t	mult_by_block_size(u_int32_t num);
 u_int32_t	div_by_block_size(u_int32_t num);
 u_int32_t	get_rgba(int r, int g, int b, int a);
 t_rgb		get_pxl_rgba(mlx_image_t *img, int y, int x);
+mlx_image_t	*get_wall_img(t_walls *wall_imgs, t_ray *ray);
 
 // check_settings.c --------------------------------------------------------- //
 t_error	check_settings(void);
