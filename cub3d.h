@@ -146,6 +146,7 @@ typedef struct s_cub3d
 	t_map		map;			// map data
 	t_view		view;			// viewing field
 	t_dvec		player_pos;		// player position in pxl
+	t_cub_mmap	mini;
 }	t_cub3d;
 
 typedef enum e_screen_dims
@@ -172,6 +173,14 @@ typedef struct s_minimap_help
 	mlx_image_t	*img;
 	mlx_t		*mlx;
 }		t_minimap_help;
+
+typedef struct s_cub_mmap
+{
+	int32_t		minimap_square;
+	double		offset_y;
+	double		offset_x;
+	mlx_image_t	*player;
+}		t_cub_mmap;
 
 typedef enum e_minimap_colours
 {

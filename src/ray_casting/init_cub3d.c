@@ -139,6 +139,8 @@ t_error	init_cub3d(t_cub3d *cub3d, t_input *input)
 	cub3d->map = input->map;
 	// set player starting position
 	cub3d->player_pos = get_plr_pos(&cub3d->map);
+	cub3d->minimap_square = 0;
+	cub3d->minimap_offset = 0;
 
 	set_view(&cub3d->view, get_map_char(dvec_to_cor_bl(cub3d->player_pos), &cub3d->map));
 	return (0);

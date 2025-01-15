@@ -6,7 +6,7 @@
 /*   By: dode-boe <dode-boe@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/11/05 14:37:08 by dode-boe      #+#    #+#                 */
-/*   Updated: 2024/12/01 16:38:05 by dode-boe      ########   odam.nl         */
+/*   Updated: 2025/01/15 20:51:56 by dode-boe      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,10 @@ t_error	draw_minimap(t_cub3d *cub)
 		perror("mlx_image_to_window in draw_minimap.c:49");
 		return (-1);
 	}
+	cub->mini.minimap_square = minimap.square;
+	cub->mini.player = plr_img;
+	cub->mini.offset_x = 0;
+	cub->mini.offset_y = 0;
 	return (0);
 }
 

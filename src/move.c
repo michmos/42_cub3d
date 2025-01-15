@@ -6,7 +6,7 @@
 /*   By: dode-boe <dode-boe@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/12/01 16:14:22 by dode-boe      #+#    #+#                 */
-/*   Updated: 2024/12/02 17:43:08 by dode-boe      ########   odam.nl         */
+/*   Updated: 2025/01/15 20:36:15 by dode-boe      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,7 @@ u_int8_t	move(t_cub3d *cub, t_movedata dir)
 		&& !is_wall(dvec_to_cor_bl((t_dvec) {new.x - HITBOX, new.y}), &cub->map)
 		&& !is_wall(dvec_to_cor_bl((t_dvec) {new.x, new.y - HITBOX}), &cub->map))
 	{
+		move_minimap(new, cub);
 		cub->player_pos.x = new.x;
 		cub->player_pos.y = new.y;
 		return (true);
@@ -44,18 +45,15 @@ static t_dvec	get_xy_offset(t_deg dir_angle, t_movedata dir)
 		dir_angle = sum_angle(dir_angle, 90);
 	else if (dir == RIGHT)
 		dir_angle = sum_angle(dir_angle, 270);
-
 	alpha = (u_int16_t)(dir_angle) % 90 + (dir_angle - (uint16_t) dir_angle);
 	if (dir_angle >= 270 || (dir_angle >= 90 && dir_angle < 180))
 		alpha = 90 - alpha;
-
 	adjust_x = 1;
 	if (dir_angle > 90 && dir_angle < 270)
 		adjust_x = -1;
 	adjust_y = 1;
 	if (dir_angle < 180)
 		adjust_y = -1;
-
 	offset.x = cos(deg_to_rad(alpha)) * MOVE_DISTANCE * adjust_x;
 	offset.y = sin(deg_to_rad(alpha)) * MOVE_DISTANCE * adjust_y;
 	return (offset);
@@ -85,4 +83,18 @@ u_int8_t	rotate(t_cub3d *cub, t_movedata dir)
 {
 	cub->view.dir_angle = sum_angle(cub->view.dir_angle, ROTATE_AMT * dir);
 	return (true);
+}
+
+void	move_minimap(t_dvec new, t_cub3d *cub)
+{
+	double	d_x;
+	double	d_y;
+	
+
+	d_x = (new.x - cub->player_pos.x) * (fmod((double)cub->mini.minimap_square, (double)BLOCK_SIZE) + cub->mini.offset_x);
+	d_y = (new.y - cub->player_pos.y) * (fmod((double)cub->mini.minimap_square, (double)BLOCK_SIZE) + cub->mini.offset_y);
+	cub->mini.offset_x = d_x - (int)d_x;
+	cub->mini.offset_y = d_y - (int)d_y;
+	cub->mini.player->instances[0].x += (int)d_x;
+	cub->mini.player->instances[0].y += (int)d_y;
 }
