@@ -23,12 +23,32 @@ static u_int32_t	get_actual_distance(t_ray *ray, t_deg view_angle)
 	return (actual_distance);
 }
 
+void	init_with_smaller(t_ray *ver_hit, t_ray *hor_hit, t_ray *ray, bool last_was_ver)
+{
+	double		diff;
+
+	diff = fabs(hor_hit->ray_distance - ver_hit->ray_distance);
+	if ((diff < 0.3 && last_was_ver)
+	|| ((ver_hit->ray_distance < hor_hit->ray_distance && ver_hit->ray_distance > 0) && diff > 0.3) || hor_hit->ray_distance == -1)
+	{
+		ray->intersec = ver_hit->intersec;
+		ray->ray_distance = ver_hit->ray_distance;
+		ray->vrtcl_intersec = true;
+	}
+	else
+	{
+		ray->intersec = hor_hit->intersec;
+		ray->ray_distance = hor_hit->ray_distance;
+		ray->vrtcl_intersec = false;
+	}
+}
+
 void	find_distance_to_wall(t_ray	*ray, t_dvec pov, t_deg view_angle, t_map *map)
 {
-	t_ray	hor_hit;
-	t_ray	ver_hit;
+	t_ray		hor_hit;
+	t_ray		ver_hit;
 	static bool	last_was_ver = false;
-	double	diff;
+	double		diff;
 
 	hor_hit.ray_distance = -1;
 	ver_hit.ray_distance = -1;
@@ -42,20 +62,7 @@ void	find_distance_to_wall(t_ray	*ray, t_dvec pov, t_deg view_angle, t_map *map)
 		ver_hit.intersec = get_ver_intersec_hit(pov, ray->angle, map);
 		ver_hit.ray_distance = get_vec_len(pov, ver_hit.intersec);
 	}
-	diff = fabs(hor_hit.ray_distance - ver_hit.ray_distance);
-	if ((diff < 0.3 && last_was_ver)
-	|| ((ver_hit.ray_distance < hor_hit.ray_distance && ver_hit.ray_distance > 0) && diff > 0.3) || hor_hit.ray_distance == -1)
-	{
-		ray->intersec = ver_hit.intersec;
-		ray->ray_distance = ver_hit.ray_distance;
-		ray->vrtcl_intersec = true;
-	}
-	else
-	{
-		ray->intersec = hor_hit.intersec;
-		ray->ray_distance = hor_hit.ray_distance;
-		ray->vrtcl_intersec = false;
-	}
+	init_with_smaller(&ver_hit, &hor_hit, ray, last_was_ver);
 	last_was_ver = ray->vrtcl_intersec;
 	ray->actual_distance = get_actual_distance(ray, view_angle);
 }

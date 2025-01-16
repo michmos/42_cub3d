@@ -102,7 +102,6 @@ t_error	parse_file(t_input *input, const char *map_path)
 	t_in_stream	file_content;
 	int		fd;
 
-
 	if (!has_cub_extension(map_path))
 	{
 		put_err("Config file must end on .cub");
@@ -110,10 +109,7 @@ t_error	parse_file(t_input *input, const char *map_path)
 	}
 	fd = open(map_path, O_RDONLY);
 	if (fd == -1)
-	{
 		return (perror("open"), -1);
-	}
-
 	file_content.buffer = read_file(fd);
 	if (!file_content.buffer)
 	{
