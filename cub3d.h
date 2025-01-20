@@ -176,10 +176,10 @@ typedef struct s_minimap_dims
 
 typedef struct s_minimap_help
 {
-	int y;
-	int x;
-	mlx_image_t *img;
-	mlx_t *mlx;
+	size_t		y;
+	size_t		x;
+	mlx_image_t	*img;
+	mlx_t		*mlx;
 } t_minimap_help;
 
 typedef enum e_minimap_colours
@@ -316,6 +316,15 @@ u_int8_t rotate(t_cub3d *cub, t_movedata dir);
 // minimap																	  //
 ////////////////////////////////////////////////////////////////////////////////
 
-t_error draw_minimap(t_cub3d *cub);
+t_error			draw_minimap(t_cub3d *cub);
+t_minimap_dims	minimap_background(t_cub3d *cub);
+
+// minimap_utils.c
+int			colour(char c);
+bool		is_player_pos(char c);
+t_vec		get_plr_pos_mmap(t_cub3d *cub);
+void		init_cub3d_mmap(t_cub3d *cub, uint16_t square, mlx_image_t *plr_img);
+t_minimap_dims
+			get_bs_dims(t_cub3d *cub);
 
 #endif // !CUB3D_H

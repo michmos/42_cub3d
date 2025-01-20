@@ -6,7 +6,7 @@
 /*   By: mmoser <mmoser@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/20 10:32:30 by mmoser        #+#    #+#                 */
-/*   Updated: 2025/01/20 10:33:06 by mmoser        ########   odam.nl         */
+/*   Updated: 2025/01/20 12:03:58 by dode-boe      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,7 +92,6 @@ void	draw_vertical(t_cub3d *cub3d, u_int16_t frame_x_pos,
 {
 	static u_int16_t	center = WINDOW_HEIGHT / 2;
 	t_wall_data			wall_data;
-	size_t				y;
 
 	wall_data = get_wall_data(&cub3d->wall_imgs, ray, scaled_height, center);
 	put_ceiling(cub3d->nxt_frame, wall_data.upper_end, frame_x_pos,

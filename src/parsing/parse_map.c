@@ -6,7 +6,7 @@
 /*   By: mmoser <mmoser@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/20 10:29:17 by mmoser        #+#    #+#                 */
-/*   Updated: 2025/01/20 10:30:56 by mmoser        ########   odam.nl         */
+/*   Updated: 2025/01/20 12:04:28 by dode-boe      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,6 @@ static bool	line_blngs_to_map(const char *rmng_map)
 
 static size_t	get_height(const char *map_str)
 {
-	char	*nl_ptr;
 	size_t	height;
 	size_t	i;
 
@@ -101,7 +100,6 @@ t_error	parse_map(t_in_stream *stream, t_map *map)
 {
 	size_t	width;
 	size_t	i;
-	char	*nl_ptr;
 
 	if (!rmng_syntax_is_crrct(*stream))
 		return (-1);

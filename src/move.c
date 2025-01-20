@@ -6,7 +6,7 @@
 /*   By: dode-boe <dode-boe@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/12/01 16:14:22 by dode-boe      #+#    #+#                 */
-/*   Updated: 2025/01/15 21:01:09 by dode-boe      ########   odam.nl         */
+/*   Updated: 2025/01/20 11:49:12 by dode-boe      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,10 +20,10 @@ u_int8_t	move(t_cub3d *cub, t_movedata dir)
 	t_dvec	new;
 
 	new = new_pos(cub, dir);
-	if (!is_wall(dvec_to_cor_bl((t_dvec) {new.x + HITBOX, new.y}), &cub->map)
-		&& !is_wall(dvec_to_cor_bl((t_dvec) {new.x, new.y + HITBOX}), &cub->map)
-		&& !is_wall(dvec_to_cor_bl((t_dvec) {new.x - HITBOX, new.y}), &cub->map)
-		&& !is_wall(dvec_to_cor_bl((t_dvec) {new.x, new.y - HITBOX}), &cub->map))
+	if (!is_wall(dvec_to_cor_bl((t_dvec){new.x + HITBOX, new.y}), &cub->map)
+		&& !is_wall(dvec_to_cor_bl((t_dvec){new.x, new.y + HITBOX}), &cub->map)
+		&& !is_wall(dvec_to_cor_bl((t_dvec){new.x - HITBOX, new.y}), &cub->map)
+		&& !is_wall(dvec_to_cor_bl((t_dvec){new.x, new.y - HITBOX}), &cub->map))
 	{
 		move_minimap(new, cub);
 		cub->player_pos.x = new.x;
@@ -73,10 +73,8 @@ static t_dvec	new_pos(t_cub3d *cub, t_movedata dir)
 	}
 	last_dir_angle = cub->view.dir_angle;
 	last_dir = dir;
-
 	new.x = cub->player_pos.x + offsets.x;
 	new.y = cub->player_pos.y + offsets.y;
-
 	return (new);
 }
 
@@ -90,7 +88,6 @@ static void	move_minimap(t_dvec new, t_cub3d *cub)
 {
 	double	d_x;
 	double	d_y;
-	
 
 	d_x = (new.x - cub->player_pos.x) * cub->mini.ratio + cub->mini.offset_x;
 	d_y = (new.y - cub->player_pos.y) * cub->mini.ratio + cub->mini.offset_y;

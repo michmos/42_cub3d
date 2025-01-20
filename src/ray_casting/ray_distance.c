@@ -6,13 +6,13 @@
 /*   By: mmoser <mmoser@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/20 10:32:47 by mmoser        #+#    #+#                 */
-/*   Updated: 2025/01/20 10:35:10 by mmoser        ########   odam.nl         */
+/*   Updated: 2025/01/20 12:03:41 by dode-boe      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../cub3d.h"
 
-const double	get_vec_len(t_dvec start, t_dvec end)
+static double	get_vec_len(t_dvec start, t_dvec end)
 {
 	double	cath1;
 	double	cath2;
@@ -63,7 +63,6 @@ void	find_distance_to_wall(t_ray *ray, t_dvec pov, t_deg view_angle,
 	t_ray		hor_hit;
 	t_ray		ver_hit;
 	static bool	last_was_ver = false;
-	double		diff;
 
 	hor_hit.ray_distance = -1;
 	ver_hit.ray_distance = -1;

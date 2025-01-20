@@ -1,14 +1,25 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        ::::::::            */
+/*   main_parsing.c                                     :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: dode-boe <dode-boe@student.codam.nl>         +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2025/01/20 11:53:15 by dode-boe      #+#    #+#                 */
+/*   Updated: 2025/01/20 11:55:13 by dode-boe      ########   odam.nl         */
+/*                                                                            */
+/* ************************************************************************** */
 
 #include "../../cub3d.h"
 
-static void	test_put_map(t_map *map)
-{
-	printf("map width: %zu\n", map->width);
-	printf("map height: %zu\n", map->height);
-	for (int j =  0; j < map->height - 1; ++j) {
-		printf("%33.33s\n", &map->map[33 * j]);
-	}
-}
+// static void	test_put_map(t_map *map)
+// {
+// 	printf("map width: %zu\n", map->width);
+// 	printf("map height: %zu\n", map->height);
+// 	for (int j =  0; j < map->height - 1; ++j) {
+// 		printf("%33.33s\n", &map->map[33 * j]);
+// 	}
+// }
 
 static void	test_put_input(t_input *input)
 {
@@ -18,8 +29,10 @@ static void	test_put_input(t_input *input)
 	printf("\nsouth_txtre: %s\n", input->south_txtre);
 	printf("\nwest_txtre: %s\n", input->west_txtre);
 	printf("\neast_txtre: %s\n", input->east_txtre);
-	printf("\nfloor: r: %i g: %i b: %i\n", input->floor.r, input->floor.g, input->floor.b);
-	printf("\nceiling: r: %i g: %i b: %i\n", input->ceiling.r, input->ceiling.g, input->ceiling.b);
+	printf("\nfloor: r: %i g: %i b: %i\n", \
+	input->floor.r, input->floor.g, input->floor.b);
+	printf("\nceiling: r: %i g: %i b: %i\n", \
+	input->ceiling.r, input->ceiling.g, input->ceiling.b);
 }
 
 int	main(int argc, char *argv[])
@@ -34,10 +47,9 @@ int	main(int argc, char *argv[])
 	ft_bzero(&input, sizeof(t_input));
 	if (parse_file(&input, argv[1]) == -1)
 	{
-		return 1;
+		return (1);
 	}
 	test_put_input(&input);
 	free_input(&input);
 	return (0);
 }
-

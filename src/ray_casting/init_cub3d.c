@@ -6,17 +6,11 @@
 /*   By: mmoser <mmoser@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/15 17:41:04 by mmoser        #+#    #+#                 */
-/*   Updated: 2025/01/20 10:33:41 by mmoser        ########   odam.nl         */
+/*   Updated: 2025/01/20 12:05:16 by dode-boe      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../cub3d.h"
-
-static bool	is_player_pos(char c)
-{
-	return (c == PLAYER_EAST || c == PLAYER_NORTH || c == PLAYER_WEST
-		|| c == PLAYER_SOUTH);
-}
 
 static t_dvec	get_plr_pos(t_map *map)
 {
