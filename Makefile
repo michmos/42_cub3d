@@ -24,7 +24,7 @@ CFLAGS	:= -MMD -MP
 endif
 LDFLAGS	:= -ldl -lglfw -pthread -lm
 RM		:= rm -rf
-DEBUG	?= 1
+DEBUG	?= 0
 ifeq ($(DEBUG), 1)
 CFLAGS	+= -g -fsanitize=address
 LDFLAGS	+= -fsanitize=address

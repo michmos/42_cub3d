@@ -6,24 +6,31 @@
 /*   By: mmoser <mmoser@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/20 11:23:50 by mmoser        #+#    #+#                 */
-/*   Updated: 2025/01/20 12:23:22 by mmoser        ########   odam.nl         */
+/*   Updated: 2025/01/20 12:35:29 by dode-boe      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../cub3d.h"
-
-static const int	g_log2_blocks_size = (int)log2(BLOCK_SIZE);
+#include <math.h>
 
 // divide by block size through bit shifting
 u_int32_t	div_by_block_size(u_int32_t num)
 {
-	return (num >> g_log2_blocks_size);
+	static int	log2_blocks_size = 0;
+
+	if (log2_blocks_size == 0)
+		log2_blocks_size = (int)log2(BLOCK_SIZE);
+	return (num >> log2_blocks_size);
 }
 
 // multiply by block size through bit shifting
 u_int32_t	mult_by_block_size(u_int32_t num)
 {
-	return (num << g_log2_blocks_size);
+	static int	log2_blocks_size = 0;
+
+	if (log2_blocks_size == 0)
+		log2_blocks_size = (int)log2(BLOCK_SIZE);
+	return (num << log2_blocks_size);
 }
 
 // returns the rgb value
