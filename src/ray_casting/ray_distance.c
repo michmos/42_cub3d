@@ -1,3 +1,14 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        ::::::::            */
+/*   ray_distance.c                                     :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: mmoser <mmoser@student.codam.nl>             +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2025/01/20 10:32:47 by mmoser        #+#    #+#                 */
+/*   Updated: 2025/01/20 10:35:10 by mmoser        ########   odam.nl         */
+/*                                                                            */
+/* ************************************************************************** */
 
 #include "../../cub3d.h"
 
@@ -16,20 +27,23 @@ const double	get_vec_len(t_dvec start, t_dvec end)
 static u_int32_t	get_actual_distance(t_ray *ray, t_deg view_angle)
 {
 	u_int32_t	actual_distance;
-	t_deg	beta;
+	t_deg		beta;
 
-	beta = sum_angle(ray->angle, - view_angle);
+	beta = sum_angle(ray->angle, -view_angle);
 	actual_distance = cos(deg_to_rad(beta)) * ray->ray_distance;
 	return (actual_distance);
 }
 
-void	init_with_smaller(t_ray *ver_hit, t_ray *hor_hit, t_ray *ray, bool last_was_ver)
+void	init_with_smaller(t_ray *ver_hit, t_ray *hor_hit, t_ray *ray,
+		bool last_was_ver)
 {
-	double		diff;
+	double	diff;
 
 	diff = fabs(hor_hit->ray_distance - ver_hit->ray_distance);
 	if ((diff < 0.3 && last_was_ver)
-	|| ((ver_hit->ray_distance < hor_hit->ray_distance && ver_hit->ray_distance > 0) && diff > 0.3) || hor_hit->ray_distance == -1)
+		|| ((ver_hit->ray_distance < hor_hit->ray_distance
+				&& ver_hit->ray_distance > 0) && diff > 0.3)
+		|| hor_hit->ray_distance == -1)
 	{
 		ray->intersec = ver_hit->intersec;
 		ray->ray_distance = ver_hit->ray_distance;
@@ -43,7 +57,8 @@ void	init_with_smaller(t_ray *ver_hit, t_ray *hor_hit, t_ray *ray, bool last_was
 	}
 }
 
-void	find_distance_to_wall(t_ray	*ray, t_dvec pov, t_deg view_angle, t_map *map)
+void	find_distance_to_wall(t_ray *ray, t_dvec pov, t_deg view_angle,
+		t_map *map)
 {
 	t_ray		hor_hit;
 	t_ray		ver_hit;

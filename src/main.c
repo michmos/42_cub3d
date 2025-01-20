@@ -3,20 +3,19 @@
 /*                                                        ::::::::            */
 /*   main.c                                             :+:    :+:            */
 /*                                                     +:+                    */
-/*   By: dode-boe <dode-boe@student.codam.nl>         +#+                     */
+/*   By: mmoser <mmoser@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
-/*   Created: 2025/01/12 16:39:16 by dode-boe      #+#    #+#                 */
-/*   Updated: 2025/01/15 20:36:54 by dode-boe      ########   odam.nl         */
+/*   Created: 2025/01/20 11:23:32 by mmoser        #+#    #+#                 */
+/*   Updated: 2025/01/20 11:24:15 by mmoser        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
-
 #include "../cub3d.h"
 
-void loophook(void *param)
+void	loophook(void *param)
 {
-	t_cub3d *cub;
-	u_int8_t moved;
+	t_cub3d		*cub;
+	u_int8_t	moved;
 
 	moved = false;
 	cub = (t_cub3d *)param;
@@ -36,10 +35,10 @@ void loophook(void *param)
 		draw_view(cub);
 }
 
-int main(int argc, char *argv[])
+int	main(int argc, char *argv[])
 {
-	t_cub3d cub3d;
-	t_input input;
+	t_cub3d	cub3d;
+	t_input	input;
 
 	if (argc != 2)
 		return (put_err(USAGE_ERR), -1);

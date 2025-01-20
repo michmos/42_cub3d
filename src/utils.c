@@ -1,8 +1,19 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        ::::::::            */
+/*   utils.c                                            :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: mmoser <mmoser@student.codam.nl>             +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2025/01/20 11:23:46 by mmoser        #+#    #+#                 */
+/*   Updated: 2025/01/20 11:24:30 by mmoser        ########   odam.nl         */
+/*                                                                            */
+/* ************************************************************************** */
 
 #include "../cub3d.h"
 
 // returns char in map at cor
-char get_map_char(t_cor_bl cor, t_map *map)
+char	get_map_char(t_cor_bl cor, t_map *map)
 {
 	assert(cor.y < map->height);
 	assert(cor.x < map->width);
@@ -10,7 +21,7 @@ char get_map_char(t_cor_bl cor, t_map *map)
 }
 
 // returns true if wall found at cor
-bool is_wall(t_cor_bl cor, t_map *map)
+bool	is_wall(t_cor_bl cor, t_map *map)
 {
 	assert(cor.y < map->height);
 	assert(cor.x < map->width);
@@ -18,15 +29,15 @@ bool is_wall(t_cor_bl cor, t_map *map)
 }
 
 // returns true if block cordinate is inside map boundaries
-bool is_in_map(t_cor_bl cor, t_map *map)
+bool	is_in_map(t_cor_bl cor, t_map *map)
 {
 	return (cor.x < map->width && cor.y < map->height);
 }
 
 // returns sum ensuring 0 <= sum < 360
-t_deg sum_angle(t_deg angle1, t_deg angle2)
+t_deg	sum_angle(t_deg angle1, t_deg angle2)
 {
-	t_deg sum;
+	t_deg	sum;
 
 	sum = angle1 + angle2;
 	if (sum >= 360)
@@ -41,7 +52,7 @@ t_deg sum_angle(t_deg angle1, t_deg angle2)
 }
 
 // divide by block size through bit shifting
-u_int32_t div_by_block_size(u_int32_t num)
+u_int32_t	div_by_block_size(u_int32_t num)
 {
 	return (num >> LOG2_BLOCKS_SIZE);
 }

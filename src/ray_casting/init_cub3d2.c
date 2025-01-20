@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   init_cub3d2.c                                      :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: mmoser <mmoser@student.codam.nl>           +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/01/15 17:41:11 by mmoser            #+#    #+#             */
-/*   Updated: 2025/01/15 17:41:46 by mmoser           ###   ########.fr       */
+/*                                                        ::::::::            */
+/*   init_cub3d2.c                                      :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: mmoser <mmoser@student.codam.nl>             +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2025/01/15 17:41:11 by mmoser        #+#    #+#                 */
+/*   Updated: 2025/01/20 10:33:54 by mmoser        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 size_t	get_plane_distance(void)
 {
-	return (( WINDOW_WIDTH / 2.0) / tan(deg_to_rad( FOV / 2.0)));
+	return ((WINDOW_WIDTH / 2.0) / tan(deg_to_rad(FOV / 2.0)));
 }
 
 t_deg	get_dir_angle(t_fields init_dir)

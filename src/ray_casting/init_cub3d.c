@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   init_cub3d.c                                       :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: mmoser <mmoser@student.codam.nl>           +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/01/15 17:41:04 by mmoser            #+#    #+#             */
-/*   Updated: 2025/01/15 17:41:06 by mmoser           ###   ########.fr       */
+/*                                                        ::::::::            */
+/*   init_cub3d.c                                       :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: mmoser <mmoser@student.codam.nl>             +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2025/01/15 17:41:04 by mmoser        #+#    #+#                 */
+/*   Updated: 2025/01/20 10:33:41 by mmoser        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,8 @@
 
 static bool	is_player_pos(char c)
 {
-	return ( c == PLAYER_EAST || c == PLAYER_NORTH || c == PLAYER_WEST || c == PLAYER_SOUTH);
+	return (c == PLAYER_EAST || c == PLAYER_NORTH || c == PLAYER_WEST
+		|| c == PLAYER_SOUTH);
 }
 
 static t_dvec	get_plr_pos(t_map *map)
@@ -32,7 +33,7 @@ static t_dvec	get_plr_pos(t_map *map)
 	return (pos);
 }
 
-static t_error	load_img(mlx_t	*mlx, mlx_image_t **dst, const char *path)
+static t_error	load_img(mlx_t *mlx, mlx_image_t **dst, const char *path)
 {
 	mlx_texture_t	*txtre;
 
@@ -40,14 +41,14 @@ static t_error	load_img(mlx_t	*mlx, mlx_image_t **dst, const char *path)
 	if (!txtre)
 	{
 		perror("mlx_load_png");
-		return(-1);
+		return (-1);
 	}
 	*dst = mlx_texture_to_image(mlx, txtre);
 	mlx_delete_texture(txtre);
 	if (!*dst)
 	{
 		perror("mlx_texture_to_image");
-		return(-1);
+		return (-1);
 	}
 	return (0);
 }
@@ -96,6 +97,7 @@ t_error	init_cub3d(t_cub3d *cub3d, t_input *input)
 	cub3d->ceiling = input->ceiling;
 	cub3d->map = input->map;
 	cub3d->player_pos = get_plr_pos(&cub3d->map);
-	set_view(&cub3d->view, get_map_char(dvec_to_cor_bl(cub3d->player_pos), &cub3d->map));
+	set_view(&cub3d->view, get_map_char(dvec_to_cor_bl(cub3d->player_pos),
+			&cub3d->map));
 	return (0);
 }
