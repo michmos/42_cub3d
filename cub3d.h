@@ -6,7 +6,7 @@
 /*   By: mmoser <mmoser@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/20 12:24:22 by mmoser        #+#    #+#                 */
-/*   Updated: 2025/01/20 12:27:46 by mmoser        ########   odam.nl         */
+/*   Updated: 2025/01/20 12:58:31 by dode-boe      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -240,6 +240,7 @@ t_error				parse_file(t_input *input, const char *map_path);
 
 // parse_map.c -------------------------------------------------------------- //
 t_error				parse_map(t_in_stream *stream, t_map *map);
+bool				mult_start_pos(char *map);
 
 // check.c ------------------------------------------------------------------ //
 int					trace_map(t_map *map);

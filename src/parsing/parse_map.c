@@ -6,7 +6,7 @@
 /*   By: mmoser <mmoser@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/20 10:29:17 by mmoser        #+#    #+#                 */
-/*   Updated: 2025/01/20 12:04:28 by dode-boe      ########   odam.nl         */
+/*   Updated: 2025/01/20 13:00:38 by dode-boe      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -117,8 +117,10 @@ t_error	parse_map(t_in_stream *stream, t_map *map)
 		stream->idx += width + 1;
 		i++;
 	}
+	if (mult_start_pos(map->map))
+		return (free(map->map), map->map = NULL, -1);
 	if (trace_map(map))
-		return (free(map->map), -1);
+		return (free(map->map), map->map = NULL, -1);
 	replace_spaces(map->map);
 	return (0);
 }

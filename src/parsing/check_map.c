@@ -6,7 +6,7 @@
 /*   By: dode-boe <dode-boe@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/11/05 14:37:08 by dode-boe      #+#    #+#                 */
-/*   Updated: 2025/01/20 11:52:55 by dode-boe      ########   odam.nl         */
+/*   Updated: 2025/01/20 12:55:38 by dode-boe      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,4 +80,32 @@ int	trace_map(t_map *map)
 		y++;
 	}
 	return (0);
+}
+
+bool	mult_start_pos(char *map)
+{
+	int	i;
+	int	plr;
+
+	plr = 0;
+	i = 0;
+	while (map[i])
+	{
+		if (is_player_pos(map[i]))
+		{
+			plr++;
+			if (plr != 1)
+			{
+				put_err("Encountered multiple player characters in map\n");
+				return (true);
+			}
+		}
+		i++;
+	}
+	if (!plr)
+	{
+		put_err("Didn't find a player starting position\n");
+		return (true);
+	}
+	return (false);
 }
