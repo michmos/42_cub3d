@@ -6,7 +6,7 @@
 /*   By: mmoser <mmoser@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/20 11:23:46 by mmoser        #+#    #+#                 */
-/*   Updated: 2025/01/20 11:24:30 by mmoser        ########   odam.nl         */
+/*   Updated: 2025/01/20 12:23:42 by mmoser        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,10 +49,4 @@ t_deg	sum_angle(t_deg angle1, t_deg angle2)
 		sum += 360;
 	}
 	return (sum);
-}
-
-// divide by block size through bit shifting
-u_int32_t	div_by_block_size(u_int32_t num)
-{
-	return (num >> LOG2_BLOCKS_SIZE);
 }
