@@ -1,5 +1,17 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        ::::::::            */
+/*   utils3.c                                           :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: mmoser <mmoser@student.codam.nl>             +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2025/01/20 10:29:47 by mmoser        #+#    #+#                 */
+/*   Updated: 2025/01/20 10:32:02 by mmoser        ########   odam.nl         */
+/*                                                                            */
+/* ************************************************************************** */
 
 #include "../../cub3d.h"
+
 // output line until new line character
 void	put_cur_line(int fd, t_in_stream *stream)
 {
@@ -24,7 +36,6 @@ void	put_cur_line(int fd, t_in_stream *stream)
 	write(fd, &stream->buffer[i], len);
 	write(fd, "\n", 1);
 }
-
 
 // output word until new line character
 void	put_cur_word(int fd, const char *str)

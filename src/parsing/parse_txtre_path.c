@@ -1,3 +1,14 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        ::::::::            */
+/*   parse_txtre_path.c                                 :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: mmoser <mmoser@student.codam.nl>             +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2025/01/20 10:29:25 by mmoser        #+#    #+#                 */
+/*   Updated: 2025/01/20 10:31:18 by mmoser        ########   odam.nl         */
+/*                                                                            */
+/* ************************************************************************** */
 
 #include "../../cub3d.h"
 
@@ -17,4 +28,3 @@ t_error	parse_txtre_path(t_in_stream *stream, char **txtre_path)
 	stream->idx += path_len;
 	return (0);
 }
-

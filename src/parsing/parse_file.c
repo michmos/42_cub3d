@@ -1,58 +1,71 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   parse_file.c                                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mmoser <mmoser@student.codam.nl>           +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/01/20 10:28:28 by mmoser            #+#    #+#             */
+/*   Updated: 2025/01/20 10:28:29 by mmoser           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
 #include "../../cub3d.h"
-#include <unistd.h>
 
-static t_error	parse_txtrs(t_in_stream *file_content, t_input *input, int *input_flags)
+static t_error	parse_txtrs(t_in_stream *f_content, t_input *input,
+		int *in_flags)
 {
 	t_error	error;
-	
+
 	error = 0;
-	if (ft_strncmp(cur_ptr(file_content), "NO ", 3) == 0 && !(*input_flags & NO))
+	if (ft_strncmp(cur_ptr(f_content), "NO ", 3) == 0 && !(*in_flags & NO))
 	{
-		error = parse_txtre_path(file_content, &input->north_txtre);
-		*input_flags |= NO;
+		error = parse_txtre_path(f_content, &input->north_txtre);
+		*in_flags |= NO;
 	}
-	else if (ft_strncmp(cur_ptr(file_content), "SO ", 3) == 0 && !(*input_flags & SO))
+	else if (ft_strncmp(cur_ptr(f_content), "SO ", 3) == 0 && !(*in_flags & SO))
 	{
-		error = parse_txtre_path(file_content, &input->south_txtre);
-		*input_flags |= SO;
+		error = parse_txtre_path(f_content, &input->south_txtre);
+		*in_flags |= SO;
 	}
-	else if (ft_strncmp(cur_ptr(file_content), "WE ", 3) == 0 && !(*input_flags & WE))
+	else if (ft_strncmp(cur_ptr(f_content), "WE ", 3) == 0 && !(*in_flags & WE))
 	{
-		error = parse_txtre_path(file_content, &input->west_txtre);
-		*input_flags |= WE;
+		error = parse_txtre_path(f_content, &input->west_txtre);
+		*in_flags |= WE;
 	}
-	else if (ft_strncmp(cur_ptr(file_content), "EA ", 3) == 0 && !(*input_flags & EA))
+	else if (ft_strncmp(cur_ptr(f_content), "EA ", 3) == 0 && !(*in_flags & EA))
 	{
-		error = parse_txtre_path(file_content, &input->east_txtre);
-		*input_flags |= EA;
+		error = parse_txtre_path(f_content, &input->east_txtre);
+		*in_flags |= EA;
 	}
 	return (error);
 }
 
-static t_error	parse_rest(t_in_stream *file_content, t_input *input, int *input_flags)
+static t_error	parse_rest(t_in_stream *f_content, t_input *input,
+		int *in_flags)
 {
 	t_error	error;
 
-	if (ft_strncmp(cur_ptr(file_content), "F ", 2) == 0 && !(*input_flags & F))
+	if (ft_strncmp(cur_ptr(f_content), "F ", 2) == 0 && !(*in_flags & F))
 	{
-		error = parse_rgb(file_content, &input->floor);
-		*input_flags |= F;
+		error = parse_rgb(f_content, &input->floor);
+		*in_flags |= F;
 	}
-	else if (ft_strncmp(cur_ptr(file_content), "C ", 2) == 0 && !(*input_flags & C))
+	else if (ft_strncmp(cur_ptr(f_content), "C ", 2) == 0 && !(*in_flags & C))
 	{
-		error = parse_rgb(file_content, &input->ceiling);
-		*input_flags |= C;
+		error = parse_rgb(f_content, &input->ceiling);
+		*in_flags |= C;
 	}
-	else if (is_valid_map_char(cur_char(file_content)) && *input_flags == (NO | SO | WE | EA | C | F))
+	else if (is_valid_map_char(cur_char(f_content))
+		&& *in_flags == (NO | SO | WE | EA | C | F))
 	{
-		error = parse_map(file_content, &input->map);
-		*input_flags |= M;
+		error = parse_map(f_content, &input->map);
+		*in_flags |= M;
 	}
 	else
 	{
-		put_parsing_err(file_content, "Unexpected token");
-		put_expected_tokens(*input_flags);
+		put_parsing_err(f_content, "Unexpected token");
+		put_expected_tokens(*in_flags);
 		error = -1;
 	}
 	return (error);
@@ -68,16 +81,18 @@ static t_error	parse_content(t_input *input, t_in_stream *file_content)
 	while (cur_char(file_content) && !error)
 	{
 		skip_whitespaces(file_content);
-		if ((ft_strncmp(cur_ptr(file_content), "NO ", 3) == 0 && !(input_flags & NO))
-	  		|| (ft_strncmp(cur_ptr(file_content), "SO ", 3) == 0 && !(input_flags & SO))
-	  		|| (ft_strncmp(cur_ptr(file_content), "WE ", 3) == 0 && !(input_flags & WE))
-			|| (ft_strncmp(cur_ptr(file_content), "EA ", 3) == 0 && !(input_flags & EA)))
+		if ((ft_strncmp(cur_ptr(file_content), "NO ", 3) == 0
+				&& !(input_flags & NO)) || (ft_strncmp(cur_ptr(file_content),
+					"SO ", 3) == 0 && !(input_flags & SO))
+			|| (ft_strncmp(cur_ptr(file_content), "WE ", 3) == 0
+				&& !(input_flags & WE)) || (ft_strncmp(cur_ptr(file_content),
+					"EA ", 3) == 0 && !(input_flags & EA)))
 			error = parse_txtrs(file_content, input, &input_flags);
 		else
 		{
 			error = parse_rest(file_content, input, &input_flags);
 			if (input_flags == ALL_FLAGS)
-				break;
+				break ;
 		}
 	}
 	if (error)
@@ -100,7 +115,7 @@ static bool	has_cub_extension(const char *file_name)
 t_error	parse_file(t_input *input, const char *map_path)
 {
 	t_in_stream	file_content;
-	int		fd;
+	int			fd;
 
 	if (!has_cub_extension(map_path))
 	{
@@ -125,4 +140,3 @@ t_error	parse_file(t_input *input, const char *map_path)
 	free(file_content.buffer);
 	return (0);
 }
-

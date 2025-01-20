@@ -1,3 +1,14 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        ::::::::            */
+/*   parse_rgb.c                                        :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: mmoser <mmoser@student.codam.nl>             +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2025/01/20 10:29:22 by mmoser        #+#    #+#                 */
+/*   Updated: 2025/01/20 10:31:13 by mmoser        ########   odam.nl         */
+/*                                                                            */
+/* ************************************************************************** */
 
 #include "../../cub3d.h"
 
@@ -45,7 +56,7 @@ t_error	parse_rgb(t_in_stream *stream, t_rgb *rgb)
 		return (-1);
 	if (skip_separators(stream) == -1)
 		return (-1);
-	if (parse_rgb_component(stream,&rgb->b) == -1)
+	if (parse_rgb_component(stream, &rgb->b) == -1)
 		return (-1);
 	return (0);
 }

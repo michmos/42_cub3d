@@ -1,3 +1,14 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        ::::::::            */
+/*   read_file.c                                        :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: mmoser <mmoser@student.codam.nl>             +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2025/01/20 10:29:34 by mmoser        #+#    #+#                 */
+/*   Updated: 2025/01/20 10:31:34 by mmoser        ########   odam.nl         */
+/*                                                                            */
+/* ************************************************************************** */
 
 #include "../../cub3d.h"
 
@@ -29,7 +40,7 @@ static int	append_str(char **s1, char *s2)
 	return (0);
 }
 
-char	*read_file(int	fd)
+char	*read_file(int fd)
 {
 	char	*file_content;
 	char	buffer[READ_BUF_SIZE];
@@ -37,7 +48,7 @@ char	*read_file(int	fd)
 
 	file_content = ft_strdup("");
 	if (!file_content)
-		return(handle_err(fd, NULL, "malloc"), NULL);
+		return (handle_err(fd, NULL, "malloc"), NULL);
 	bytes_read = READ_BUF_SIZE - 1;
 	while (bytes_read == READ_BUF_SIZE - 1)
 	{
@@ -53,8 +64,7 @@ char	*read_file(int	fd)
 		}
 	}
 	if (bytes_read == -1)
-		return(handle_err(fd, file_content, "read"), NULL);
+		return (handle_err(fd, file_content, "read"), NULL);
 	close(fd);
 	return (file_content);
 }
-

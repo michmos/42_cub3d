@@ -1,3 +1,14 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        ::::::::            */
+/*   parse_map.c                                        :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: mmoser <mmoser@student.codam.nl>             +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2025/01/20 10:29:17 by mmoser        #+#    #+#                 */
+/*   Updated: 2025/01/20 10:30:56 by mmoser        ########   odam.nl         */
+/*                                                                            */
+/* ************************************************************************** */
 
 #include "../../cub3d.h"
 
@@ -25,9 +36,9 @@ static size_t	get_max_width(const char *map_start, size_t height)
 static bool	line_blngs_to_map(const char *rmng_map)
 {
 	size_t	i;
-	
+
 	i = 0;
-	while(rmng_map[i] && rmng_map[i] != '\n')
+	while (rmng_map[i] && rmng_map[i] != '\n')
 	{
 		if (is_valid_map_char(rmng_map[i]) && !ft_is_whitespace(rmng_map[i]))
 			return (true);
@@ -61,20 +72,19 @@ static size_t	get_height(const char *map_str)
 
 static int	rmng_syntax_is_crrct(t_in_stream stream)
 {
-	bool 	inside_map;
+	bool	inside_map;
 
 	inside_map = true;
 	while (cur_char(&stream))
 	{
 		if (inside_map)
 		{
-			if (cur_char(&stream) == '\n' && !line_blngs_to_map(cur_ptr(&stream) + 1))
+			if (cur_char(&stream) == '\n' && !line_blngs_to_map(cur_ptr(&stream)
+					+ 1))
 				inside_map = false;
-			else if (!is_valid_map_char(cur_char(&stream)) && cur_char(&stream) != '\n')
-			{
-				put_parsing_err(&stream, "Invalid map char");
-				return (false);
-			}
+			else if (!is_valid_map_char(cur_char(&stream))
+				&& cur_char(&stream) != '\n')
+				return (put_parsing_err(&stream, "Invalid map char"), false);
 		}
 		else if (!ft_is_whitespace(cur_char(&stream)))
 		{
