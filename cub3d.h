@@ -53,10 +53,10 @@ typedef union u_rgb
 {
 	struct
 	{
-		u_int8_t r;
-		u_int8_t g;
-		u_int8_t b;
 		u_int8_t a;
+		u_int8_t b;
+		u_int8_t g;
+		u_int8_t r;
 	};
 	int	rgb;
 } t_rgb;
@@ -283,7 +283,6 @@ int			safe_atoi(const char *str, int	*result);
 bool		is_in_map(t_cor_bl cor, t_map *map);
 u_int32_t	mult_by_block_size(u_int32_t num);
 u_int32_t	div_by_block_size(u_int32_t num);
-u_int32_t	get_rgba(int r, int g, int b, int a);
 t_rgb		get_pxl_rgba(mlx_image_t *img, int y, int x);
 
 // check_settings.c --------------------------------------------------------- //

@@ -61,5 +61,6 @@ t_error	parse_rgb(t_in_stream *stream, t_rgb *rgb)
 	{
 		return (-1);
 	}
+	rgb->a = 0xFF;
 	return (0);
 }
