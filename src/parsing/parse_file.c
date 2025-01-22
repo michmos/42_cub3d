@@ -62,17 +62,31 @@ static t_error	parse_content(t_input *input, t_in_stream *file_content)
 	return (0);
 }
 
+static bool	has_cub_extension(const char *file_name)
+{
+	size_t	len;
+
+	len = ft_strlen(file_name);
+	if (len >= 4 && ft_strncmp(".cub", &file_name[len - 4], 5) == 0)
+	{
+		return (true);
+	}
+	return (false);
+}
+
 t_error	parse_file(t_input *input, const char *map_path)
 {
 	t_in_stream	file_content;
-	int		fd;
+	int			fd;
 
+	if (!has_cub_extension(map_path))
+	{
+		put_err("Config file must end on .cub");
+		return (-1);
+	}
 	fd = open(map_path, O_RDONLY);
 	if (fd == -1)
-	{
 		return (perror("open"), -1);
-	}
-
 	file_content.buffer = read_file(fd);
 	if (!file_content.buffer)
 	{
@@ -88,4 +102,3 @@ t_error	parse_file(t_input *input, const char *map_path)
 	free(file_content.buffer);
 	return (0);
 }
-
