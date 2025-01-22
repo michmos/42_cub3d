@@ -61,3 +61,14 @@ void	replace_spaces(char *str)
 		i++;
 	}
 }
+
+// resets stream idx to start of current line
+void	go_back_to_line_start(t_in_stream *stream)
+{
+	while (stream->idx != 0 && cur_char(stream) != '\n')
+	{
+		stream->idx--;
+	}
+	if (cur_char(stream) == '\n')
+		stream->idx++;
+}

@@ -6,7 +6,7 @@
 /*   By: mmoser <mmoser@student.codam.nl>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/20 10:28:28 by mmoser            #+#    #+#             */
-/*   Updated: 2025/01/20 10:28:29 by mmoser           ###   ########.fr       */
+/*   Updated: 2025/01/22 14:57:24 by mmoser           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,31 +44,29 @@ static t_error	parse_txtrs(t_in_stream *f_content, t_input *input,
 static t_error	parse_rest(t_in_stream *f_content, t_input *input,
 		int *in_flags)
 {
-	t_error	error;
-
 	if (ft_strncmp(cur_ptr(f_content), "F ", 2) == 0 && !(*in_flags & F))
 	{
-		error = parse_rgb(f_content, &input->floor);
 		*in_flags |= F;
+		return (parse_rgb(f_content, &input->floor));
 	}
 	else if (ft_strncmp(cur_ptr(f_content), "C ", 2) == 0 && !(*in_flags & C))
 	{
-		error = parse_rgb(f_content, &input->ceiling);
 		*in_flags |= C;
+		return (parse_rgb(f_content, &input->ceiling));
 	}
 	else if (is_valid_map_char(cur_char(f_content))
 		&& *in_flags == (NO | SO | WE | EA | C | F))
 	{
-		error = parse_map(f_content, &input->map);
 		*in_flags |= M;
+		go_back_to_line_start(f_content);
+		return (parse_map(f_content, &input->map));
 	}
 	else
 	{
 		put_parsing_err(f_content, "Unexpected token");
 		put_expected_tokens(*in_flags);
-		error = -1;
+		return (-1);
 	}
-	return (error);
 }
 
 static t_error	parse_content(t_input *input, t_in_stream *file_content)

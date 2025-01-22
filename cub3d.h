@@ -272,6 +272,7 @@ void				skip_chars(const char *charset, t_in_stream *stream);
 void				put_cur_line(int fd, t_in_stream *stream);
 void				put_cur_word(int fd, const char *str);
 void				replace_spaces(char *str);
+void				go_back_to_line_start(t_in_stream *stream);
 
 ////////////////////////////////////////////////////////////////////////////////
 // ray_casting																  //
