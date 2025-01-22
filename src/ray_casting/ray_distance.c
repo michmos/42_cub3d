@@ -2,7 +2,7 @@
 #include "../../cub3d.h"
 #include <math.h>
 
-const double	get_vec_len(t_dvec start, t_dvec end)
+static double	get_vec_len(t_dvec start, t_dvec end)
 {
 	double	cath1;
 	double	cath2;

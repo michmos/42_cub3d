@@ -43,7 +43,6 @@ static bool	line_blngs_to_map(const char *rmng_map)
 
 static size_t	get_height(const char *map_str)
 {
-	char	*nl_ptr;
 	size_t	height;
 	size_t	i;
 
@@ -100,7 +99,6 @@ t_error	parse_map(t_in_stream *stream, t_map *map)
 {
 	size_t	width;
 	size_t	i;
-	char	*nl_ptr;
 	t_in_stream	stream_cpy;
 
 	stream_cpy = *stream;

@@ -107,7 +107,6 @@ void	draw_vertical(t_cub3d *cub3d, u_int16_t frame_x_pos, u_int16_t scaled_heigh
 {
 	static u_int16_t	center = WINDOW_HEIGHT / 2;
 	t_wall_data			wall_data;
-	size_t				y;
 
 	wall_data = get_wall_data(&cub3d->wall_imgs, ray, scaled_height, center);
 

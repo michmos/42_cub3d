@@ -37,11 +37,6 @@ static void	set_view(t_view *view, t_fields init_dir)
 	view->dir_angle = get_dir_angle(init_dir);
 }
 
-static bool	is_player_pos(char c)
-{
-	return ( c == PLAYER_EAST || c == PLAYER_NORTH || c == PLAYER_WEST || c == PLAYER_SOUTH);
-}
-
 static t_dvec	get_plr_pos(t_map *map)
 {
 	size_t	i;

@@ -15,8 +15,8 @@
 static int				colour(char c);
 static int				color_rectangles(t_cub3d *cub, mlx_image_t *img, t_minimap_dims minimap);
 static int				color_rectangle(t_cub3d *cub, t_minimap_help *help, t_minimap_dims dims);
-static void				color_player(mlx_image_t *img, t_cub3d *cub, t_minimap_dims minimap);
-static t_vec			get_plr_pos(t_cub3d *cub, u_int8_t offset);
+static void				color_player(mlx_image_t *img, t_minimap_dims minimap);
+static t_vec			get_plr_pos(t_cub3d *cub);
 static t_minimap_dims	get_bs_dims(t_cub3d *cub);
 
 t_error	draw_minimap(t_cub3d *cub)
@@ -42,8 +42,8 @@ t_error	draw_minimap(t_cub3d *cub)
 		perror("mlx_new_image in draw_minimap.c:33");
 		return (-1);
 	}
-	color_player(plr_img, cub, minimap);
-	plr_pos = get_plr_pos(cub, minimap.square);
+	color_player(plr_img, minimap);
+	plr_pos = get_plr_pos(cub);
 	if (mlx_image_to_window(cub->mlx, plr_img, plr_pos.x * minimap.square, plr_pos.y * minimap.square) == -1)
 	{
 		perror("mlx_image_to_window in draw_minimap.c:49");
@@ -77,12 +77,12 @@ static t_minimap_dims	get_bs_dims(t_cub3d *cub)
 	return ((t_minimap_dims) {square, height, width});
 }
 
-static bool	is_player_pos(char c)
+bool	is_player_pos(char c)
 {
 	return ( c == PLAYER_EAST || c == PLAYER_NORTH || c == PLAYER_WEST || c == PLAYER_SOUTH);
 }
 
-static t_vec	get_plr_pos(t_cub3d *cub, u_int8_t offset)
+static t_vec	get_plr_pos(t_cub3d *cub)
 {
 	size_t	i;
 	t_map	map;
@@ -116,7 +116,7 @@ static int		color_rectangles(t_cub3d *cub, mlx_image_t *img, t_minimap_dims mini
 	return (0);
 }
 
-static void	color_player(mlx_image_t *img, t_cub3d *cub, t_minimap_dims minimap)
+static void	color_player(mlx_image_t *img, t_minimap_dims minimap)
 {
 	int	x;
 	int	y;

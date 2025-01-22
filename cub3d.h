@@ -176,8 +176,8 @@ typedef struct s_minimap_dims
 
 typedef struct s_minimap_help
 {
-	int			y;
-	int			x;
+	size_t			y;
+	size_t			x;
 	mlx_image_t	*img;
 	mlx_t		*mlx;
 }		t_minimap_help;
@@ -304,5 +304,6 @@ u_int8_t	rotate(t_cub3d *cub, t_movedata dir);
 ////////////////////////////////////////////////////////////////////////////////
 
 t_error	draw_minimap(t_cub3d *cub);
+bool	is_player_pos(char c);
 
 #endif // !CUB3D_H
