@@ -6,7 +6,7 @@
 /*   By: mmoser <mmoser@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/20 11:23:50 by mmoser        #+#    #+#                 */
-/*   Updated: 2025/01/20 12:35:29 by dode-boe      ########   odam.nl         */
+/*   Updated: 2025/01/22 11:18:47 by dode-boe      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,6 @@ t_rgb	get_pxl_rgba(mlx_image_t *img, int y, int x)
 
 	pixel_index = img->width * y + x;
 	pixel_data = &img->pixels[pixel_index * 4];
-	return ((t_rgb){.r = pixel_data[3], .g = pixel_data[2], .b = pixel_data[1],
-		.a = pixel_data[0]});
+	return ((t_rgb){.r = pixel_data[0], .g = pixel_data[1], .b = pixel_data[2],
+		.a = pixel_data[3]});
 }

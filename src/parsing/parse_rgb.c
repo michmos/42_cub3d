@@ -6,7 +6,7 @@
 /*   By: mmoser <mmoser@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/20 10:29:22 by mmoser        #+#    #+#                 */
-/*   Updated: 2025/01/20 10:31:13 by mmoser        ########   odam.nl         */
+/*   Updated: 2025/01/22 11:22:30 by dode-boe      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,5 +58,6 @@ t_error	parse_rgb(t_in_stream *stream, t_rgb *rgb)
 		return (-1);
 	if (parse_rgb_component(stream, &rgb->b) == -1)
 		return (-1);
+	rgb->a = 0xFF;
 	return (0);
 }

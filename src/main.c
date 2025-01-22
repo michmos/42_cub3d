@@ -6,7 +6,7 @@
 /*   By: mmoser <mmoser@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/20 11:23:32 by mmoser        #+#    #+#                 */
-/*   Updated: 2025/01/20 11:24:15 by mmoser        ########   odam.nl         */
+/*   Updated: 2025/01/22 11:17:50 by dode-boe      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,11 @@ void	loophook(void *param)
 
 	moved = false;
 	cub = (t_cub3d *)param;
+	if (mlx_is_key_down(cub->mlx, MLX_KEY_ESCAPE))
+	{
+		mlx_close_window(cub->mlx);
+		return ;
+	}
 	if (mlx_is_key_down(cub->mlx, MLX_KEY_W))
 		moved = move(cub, FORWARD);
 	else if (mlx_is_key_down(cub->mlx, MLX_KEY_S))

@@ -6,7 +6,7 @@
 /*   By: mmoser <mmoser@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/20 12:24:22 by mmoser        #+#    #+#                 */
-/*   Updated: 2025/01/20 12:58:31 by dode-boe      ########   odam.nl         */
+/*   Updated: 2025/01/22 11:21:26 by dode-boe      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,10 +63,10 @@ typedef union u_rgb
 {
 	struct
 	{
-		u_int8_t	r;
-		u_int8_t	g;
-		u_int8_t	b;
 		u_int8_t	a;
+		u_int8_t	b;
+		u_int8_t	g;
+		u_int8_t	r;
 	};
 	int				rgb;
 }					t_rgb;
