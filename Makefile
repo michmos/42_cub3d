@@ -17,13 +17,20 @@ OBJS			:= $(SRCS:$(SRC_DIR)/%.c=$(OBJ_DIR)/%.o)
 OBJS_WO_MAINS	:= $(SRCS_WO_MAINS:$(SRC_DIR)/%.c=$(OBJ_DIR)/%.o)
 
 CC		:= cc
-CFLAGS	:= -Wall -Werror -Wextra -Wunused -Wuninitialized -Wunreachable-code -MMD -MP
+CFLAGS	:= -MMD -MP
+LDFLAGS	:= -ldl -lglfw -pthread -lm
+RM		:= rm -rf
+
+BUILD	?= 0
+ifeq ($(BUILD), 1)
+CFLAGS	+= -Wall -Werror -Wextra -Wunused -Wunused-function -Wuninitialized -Wunreachable-code
+endif
+
 NOERR	?= 0
 ifeq ($(NOERR), 1)
 CFLAGS	:= -MMD -MP
 endif
-LDFLAGS	:= -ldl -lglfw -pthread -lm
-RM		:= rm -rf
+
 DEBUG	?= 0
 ifeq ($(DEBUG), 1)
 CFLAGS	+= -g -fsanitize=address
