@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   parse_file.c                                       :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: mmoser <mmoser@student.codam.nl>           +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/01/20 10:28:28 by mmoser            #+#    #+#             */
-/*   Updated: 2025/01/22 14:57:24 by mmoser           ###   ########.fr       */
+/*                                                        ::::::::            */
+/*   parse_file.c                                       :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: mmoser <mmoser@student.codam.nl>             +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2025/01/20 10:28:28 by mmoser        #+#    #+#                 */
+/*   Updated: 2025/01/22 18:35:02 by dode-boe      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,7 +94,7 @@ static t_error	parse_content(t_input *input, t_in_stream *file_content)
 		}
 	}
 	if (error)
-		return (free_input(input), -1);
+		return (free_input(input, NULL), -1);
 	return (0);
 }
 

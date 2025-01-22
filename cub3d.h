@@ -6,7 +6,7 @@
 /*   By: mmoser <mmoser@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/20 12:24:22 by mmoser        #+#    #+#                 */
-/*   Updated: 2025/01/22 11:21:26 by dode-boe      ########   odam.nl         */
+/*   Updated: 2025/01/22 18:37:21 by dode-boe      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@
 # include <unistd.h>
 
 // Error messages
-# define USAGE_ERR "USAGE: ./cub3d <map>"
+# define USAGE_ERR "USAGE: ./cub3D <map>"
 # define BLOCK_SIZE_ERR \
 "BLOCK_SIZE needs to be a power of two for performance reasons"
 
@@ -319,7 +319,7 @@ mlx_image_t			*get_wall_img(t_walls *wall_imgs, t_ray *ray);
 t_error				check_settings(void);
 
 // cleanup.c ---------------------------------------------------------------- //
-void				free_input(t_input *input);
+void				free_input(t_input *input, mlx_t *mlx);
 
 ////////////////////////////////////////////////////////////////////////////////
 // movement																	  //

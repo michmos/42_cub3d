@@ -6,7 +6,7 @@
 /*   By: dode-boe <dode-boe@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/11/05 14:37:08 by dode-boe      #+#    #+#                 */
-/*   Updated: 2025/01/20 12:55:38 by dode-boe      ########   odam.nl         */
+/*   Updated: 2025/01/22 18:32:23 by dode-boe      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,8 +42,8 @@ int	trace_line(t_map *map, size_t y, size_t x)
 		return (printf("Error\nEmpty map\n"), 1);
 	if (c == '0' || (c >= PLAYER_EAST && c <= PLAYER_WEST))
 	{
-		if (x == 0 || x == map->width || y == 0
-			|| y == map->height || borders_void(map, y, x))
+		if (x == 0 || x == map->width - 1 || y == 0
+			|| y == map->height - 1 || borders_void(map, y, x))
 		{
 			printf("Error\nMap is not properly surrounded by walls\n");
 			return (1);

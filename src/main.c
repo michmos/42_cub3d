@@ -6,7 +6,7 @@
 /*   By: mmoser <mmoser@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/20 11:23:32 by mmoser        #+#    #+#                 */
-/*   Updated: 2025/01/22 11:17:50 by dode-boe      ########   odam.nl         */
+/*   Updated: 2025/01/22 18:35:53 by dode-boe      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,14 +53,15 @@ int	main(int argc, char *argv[])
 	if (parse_file(&input, argv[1]) == -1)
 		return (-1);
 	if (init_cub3d(&cub3d, &input) == -1)
-		return (free_input(&input), -1);
+		return (free_input(&input, cub3d.mlx), -1);
 	if (draw_minimap(&cub3d) != 0)
-		return (free_input(&input), -1);
+		return (free_input(&input, cub3d.mlx), -1);
 	mlx_set_setting(MLX_STRETCH_IMAGE, true);
 	mlx_loop_hook(cub3d.mlx, loophook, &cub3d);
 	draw_view(&cub3d);
 	mlx_loop(cub3d.mlx);
 	mlx_terminate(cub3d.mlx);
-	free_input(&input);
+	cub3d.mlx = NULL;
+	free_input(&input, cub3d.mlx);
 	return (0);
 }
