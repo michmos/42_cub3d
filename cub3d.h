@@ -243,7 +243,7 @@ t_rgb		get_pxl_rgba(mlx_image_t *img, int y, int x);
 t_error	check_settings(void);
 
 // cleanup.c ---------------------------------------------------------------- //
-void	free_input(t_input *input);
+void	free_input(t_input *input, mlx_t *mlx);
 
 ////////////////////////////////////////////////////////////////////////////////
 // movement																	  //
