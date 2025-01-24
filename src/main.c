@@ -5,8 +5,8 @@
 /*                                                     +:+                    */
 /*   By: dode-boe <dode-boe@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
-/*   Created: 2025/01/12 16:39:16 by dode-boe      #+#    #+#                 */
-/*   Updated: 2025/01/15 20:36:54 by dode-boe      ########   odam.nl         */
+/*   Created: 2025/01/20 11:23:32 by mmoser        #+#    #+#                 */
+/*   Updated: 2025/01/22 18:35:53 by dode-boe      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,12 +65,12 @@ int	main(int argc, char *argv[])
 	}
 	if (init_cub3d(&cub3d, &input) == -1)
 	{
-		free_input(&input);
+		free_input(&input, cub3d.mlx);
 		return (-1);
 	}
-	if (draw_minimap(&cub3d) == -1)
+	if (draw_minimap(&cub3d) != 0)
 	{
-		free_input(&input);
+		free_input(&input, cub3d.mlx);
 		return (-1);
 	}
 	mlx_set_setting(MLX_STRETCH_IMAGE, true);
@@ -78,6 +78,6 @@ int	main(int argc, char *argv[])
 	draw_view(&cub3d);
 	mlx_loop(cub3d.mlx);
 	mlx_terminate(cub3d.mlx);
-	free_input(&input);
+	free_input(&input, NULL);
 	return (0);
 }

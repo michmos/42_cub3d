@@ -1,7 +1,18 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        ::::::::            */
+/*   cleanup.c                                          :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: mmoser <mmoser@student.codam.nl>             +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2025/01/20 11:23:26 by mmoser        #+#    #+#                 */
+/*   Updated: 2025/01/22 18:34:05 by dode-boe      ########   odam.nl         */
+/*                                                                            */
+/* ************************************************************************** */
 
 #include "../cub3d.h"
 
-void	free_input(t_input *input)
+void	free_input(t_input *input, mlx_t *mlx)
 {
 	free(input->map.map);
 	input->map.map = NULL;
@@ -13,4 +24,6 @@ void	free_input(t_input *input)
 	input->west_txtre = NULL;
 	free(input->east_txtre);
 	input->east_txtre = NULL;
+	if (mlx)
+		mlx_terminate(mlx);
 }
