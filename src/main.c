@@ -13,9 +13,6 @@
 
 #include "../cub3d.h"
 
-
-//add player_img on minimap to parms here, and move it in the move function.
-// Can't do it in draw_view, bc there is no comparison point there to see what moved
 void	loophook(void *param)
 {
 	t_cub3d 	*cub;
