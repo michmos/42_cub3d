@@ -7,15 +7,14 @@
   </tr>
 </table>
 
-## About the project
-### Task
+## About
 The goal of this project was to build a raycasting engine inspired by
 Wolfenstein 3D, rendering a first-person view of a maze from a 2D map.
 The program reads a `.cub` configuration file defining textures, colors,
 and the map layout, then uses DDA raycasting to project textured 3D walls
 in real-time.
 
-### Features
+## Features
 - Raycasting with DDA (Digital Differential Analyzer) algorithm for grid intersection detection
 - Textured walls (4 directional textures: NO, SO, WE, EA)
 - Graphics via [MLX42](https://github.com/codam-coding-college/MLX42)
@@ -26,22 +25,31 @@ in real-time.
 - Real-time minimap
 - Robust `.cub` file parsing with descriptive error messages
 
+## Algorithm
+Raycasting is a pipeline of trigonometry problems solved for each of the 1024 vertical screen columns for each frame:
+1. **DDA**: find the closest ray intersection with a wall
+2. **Fish-eye correction**: compute the actual distance to remove the spherical distortion
+3. **Wall-height scaling**: compute the wall height based on the distance of the wall
+4. **Texture selection**: select the correct texture (N/S/E/W) based on the intersection and the viewing angle
+5. **Texture slicing**: scale the texture to fill the wall
+6. **Shading**: darken rgba of computed pixel based on the distance 
+
 ## Utilization
-### Cloning
-```bash
-git clone https://github.com/michmos/42_cub3d.git && cd 42_cub3d && make
-```
+1. **Cloning**:
+   ```bash
+   git clone https://github.com/michmos/42_cub3d.git && cd 42_cub3d && make
+   ```
 
-### Running
-Run the executable with a `.cub` map file as argument:
-```
-./cub3d maps/all_walls.cub
-```
-Choose any map from the `maps/` directory or create your own.
+2. **Running**:
+   Run the executable with a `.cub` map file as argument:
+   ```
+   ./cub3d maps/all_walls.cub
+   ```
+   Choose any map from the `maps/` directory or create your own.
 
-### Controls
-| Key | Action |
-|---|---|
-| `W/A/S/D` | Move forward / strafe left / backward / strafe right |
-| `← →` | Rotate view left / right |
-| `ESC` | Quit the game |
+3. **Controls**:
+   | Key | Action |
+   |---|---|
+   | `W/A/S/D` | Move forward / strafe left / backward / strafe right |
+   | `← →` | Rotate view left / right |
+   | `ESC` | Quit the game |
