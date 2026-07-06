@@ -37,7 +37,7 @@ Raycasting is a pipeline of trigonometry problems solved for each of the 1024 ve
 ## Utilization
 1. **Cloning**:
    ```bash
-   git clone https://github.com/michmos/42_cub3d.git && cd 42_cub3d && make
+   git clone https://github.com/michmos/raycaster.git && cd 42_cub3d && make
    ```
 
 2. **Running**:
