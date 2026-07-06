@@ -1,4 +1,4 @@
-# 42 cub3d
+# raycaster
 
 <table>
   <tr>
@@ -8,11 +8,9 @@
 </table>
 
 ## About
-The goal of this project was to build a raycasting engine inspired by
-Wolfenstein 3D, rendering a first-person view of a maze from a 2D map.
-The program reads a `.cub` configuration file defining textures, colors,
-and the map layout, then uses DDA raycasting to project textured 3D walls
-in real-time.
+This project is the 42 project `cub3d`. The goal of this project is to build a raycasting engine inspired by
+Wolfenstein 3D, rendering a first-person view of a maze from a 2D map. The program reads a `.cub` configuration file 
+defining textures, colors, and the map layout, then uses DDA raycasting to project textured 3D walls in real-time.
 
 ## Features
 - Raycasting with DDA (Digital Differential Analyzer) algorithm for grid intersection detection
@@ -37,7 +35,7 @@ Raycasting is a pipeline of trigonometry problems solved for each of the 1024 ve
 ## Utilization
 1. **Cloning**:
    ```bash
-   git clone https://github.com/michmos/raycaster.git && cd 42_cub3d && make
+   git clone https://github.com/michmos/raycaster.git && cd raycaster && make
    ```
 
 2. **Running**:
